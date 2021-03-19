@@ -1,0 +1,16 @@
+color-coding/ibas-typescript
+color-coding/ibas.initialfantasy
+color-coding/ibas.thirdpartyapp
+color-coding/ibas.integration
+color-coding/ibas.documents
+color-coding/ibas.importexport
+color-coding/ibas.feedback
+color-coding/ibas.reportanalysis
+color-coding/ibas.barcode
+color-coding/ibas.accounting
+color-coding/ibas.approvalprocess
+color-coding/ibas.businesspartner
+color-coding/ibas.materials
+color-coding/ibas.purchase
+color-coding/ibas.sales
+color-coding/ibas.receiptpayment
