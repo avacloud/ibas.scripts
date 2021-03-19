@@ -1,0 +1,8 @@
+ibas_cloud/ibas.projectsystem
+ibas_cloud/ibas.qualitycontrol
+ibas_cloud/ibas.servicecenter
+ibas_cloud/ibas.shoppingclient
+ibas_cloud/ibas.store
+ibas_cloud/ibas.supplier
+ibas_cloud/ibas.warehousing
+ibas_cloud/ibas.wechatpay
