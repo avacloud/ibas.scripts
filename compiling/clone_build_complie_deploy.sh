@@ -63,7 +63,7 @@ fi
 
 read -p "--deploy war packages to repository? (yes or [n]o):" DEPLOY
 if [ "${DEPLOY}" = "y" ]; then
-    read -p "---packages version:" VERSION
+    read -p "---packages version ($(date +%Y%m%d%H%M)):" VERSION
     if [ "${VERSION}" = "" ]; then
         VERSION=$(date +%Y%m%d%H%M)
     fi
@@ -141,6 +141,7 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
     find . -name "target" -type d -exec rm -rf {} \; >/dev/null
     # 存在脚本则上传war包
     if [ "${DEPLOY}" = "y" ]; then
+        echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
         ./deploy_wars.sh ${VERSION} ${MAVEN_URL}
     fi
 done
@@ -201,6 +202,7 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
     find . -name "target" -type d -exec rm -rf {} \; >/dev/null
     # 存在脚本则上传war包
     if [ "${DEPLOY}" = "y" ]; then
+        echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
         ./deploy_wars.sh ${VERSION} ${MAVEN_URL}
     fi
 done
