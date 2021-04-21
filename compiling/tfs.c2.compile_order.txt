@@ -6,3 +6,6 @@ ibas_cloud/ibas.store
 ibas_cloud/ibas.supplier
 ibas_cloud/ibas.warehousing
 ibas_cloud/ibas.wechatpay
+ibas_cloud/ibas.product
+ibas_cloud/ibas.channels
+ibas_cloud/ibas.shopping
