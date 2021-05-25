@@ -8,8 +8,35 @@ echo '    1. clone from GitHub.                                                 
 echo '    2. clone from TFS.                                                       '
 echo '    3. builds & complies.                                                   '
 echo '    4. deploy wars.                                                         '
+echo '  parameter:                                                                '
+echo '      -q             quiet mode, no interaction.                           '
+echo '      -r             replace maven setting file.                           '
+echo '      -u [user]      tfs user.                                             '
+echo '      -p [password]  tfs password.                                         '
+echo '      -d [version]   deploy packages to repository,                         '
+echo '                         version default value is today.                    '
 echo '****************************************************************************'
 # 设置参数变量
+while getopts ":qrd:u:p:" arg; do
+    case $arg in
+    q)
+        QUIET_MODE=y
+        ;;
+    r)
+        REPLACE=y
+        ;;
+    d)
+        DEPLOY=y
+        VERSION=$OPTARG
+        ;;
+    u)
+        TFS_USER=$OPTARG
+        ;;
+    p)
+        TFS_PWD=$OPTARG
+        ;;
+    esac
+done
 # 工作目录
 WORK_FOLDER=$(pwd)
 # 开始时间
@@ -19,22 +46,17 @@ echo --Work Folder：${WORK_FOLDER}
 
 # 检查环境
 echo --checking tools
-java -version
-if [ "$?" != "0" ]; then
-    echo please install jdk.
-    exit 1
-fi
 mvn -version
 if [ "$?" != "0" ]; then
     echo please install maven.
     exit 1
 fi
-npm -v
+echo Npm Version $(npm -v)
 if [ "$?" != "0" ]; then
     echo please install nodejs and npm.
     exit 1
 fi
-tsc -v
+echo TypeScript $(tsc -v)
 if [ "$?" != "0" ]; then
     echo please run [npm install -g typescript].
     exit 1
@@ -44,26 +66,54 @@ if [ "$?" != "0" ]; then
     echo please run [npm install -g uglify-es].
     exit 1
 fi
-# 设置配置
-echo "--please confirm settings, Entry to skip."
-read -p "---replace maven setting? (yes or [n]o):" REPLACE
+
+# 配置交互，非安静模式时
+if [ "${QUIET_MODE}" != "y" ]; then
+    # 设置配置
+    echo "--please confirm settings, Entry to skip."
+    if [ "${REPLACE}" = "" ]; then
+        read -p "---replace maven setting? (yes or [n]o):" REPLACE
+    fi
+    if [ "${TFS_USER}" = "" ]; then
+        read -p "---tfs user ("\\" must be "\\\\"):" TFS_USER
+    fi
+    if [ "${TFS_PWD}" = "" ]; then
+        read -p "---tfs password:" TFS_PWD
+    fi
+    if [ "${DEPLOY}" = "" ]; then
+        read -p "--deploy war packages to repository? (yes or [n]o):" DEPLOY
+        if [ "${DEPLOY}" = "y" ]; then
+            if [ "${VERSION}" = "" ]; then
+                read -p "---packages version ($(date +%Y%m%d%H%M)):" VERSION
+            fi
+        fi
+    fi
+fi
+
+: <<!
+echo Quiet: ${QUIET_MODE}
+echo Replace: ${REPLACE}
+echo Deploy: ${DEPLOY} and Version ${VERSION}
+echo TFS User: ${TFS_USER}
+echo TFS Password: ${TFS_PWD}
+exit 1
+!
+
+# 配置文件替换
 if [ "${REPLACE}" = "y" ]; then
     if [ -e ${MAVEN_HOME}/conf/settings.xml ]; then
         cp -f ${WORK_FOLDER}/conf/maven.settings.xml ${MAVEN_HOME}/conf/settings.xml
     fi
 fi
-read -p "---tfs user ("\\" must be "\\\\"):" TFS_USER
+# TFS配置
 if [ "${TFS_USER}" != "" ]; then
     git config --global git-tf.server.username "${TFS_USER}"
 fi
-read -p "---tfs password:" TFS_PWD
 if [ "${TFS_PWD}" != "" ]; then
     git config --global git-tf.server.password "${TFS_PWD}"
 fi
-
-read -p "--deploy war packages to repository? (yes or [n]o):" DEPLOY
+# 检查部署war包时的版本号
 if [ "${DEPLOY}" = "y" ]; then
-    read -p "---packages version ($(date +%Y%m%d%H%M)):" VERSION
     if [ "${VERSION}" = "" ]; then
         VERSION=$(date +%Y%m%d%H%M)
     fi
@@ -208,6 +258,9 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
 done
 cd ${WORK_FOLDER}
 
+if [ "${DEPLOY}" = "y" ]; then
+    echo --Deploy Version: [${VERSION}]
+fi
 # 计算执行时间
 END_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 if [ "$(uname)" = "Darwin" ]; then
@@ -218,4 +271,4 @@ else
     START_SECONDS=$(date --date="$START_TIME" +%s)
     END_SECONDS=$(date --date="$END_TIME" +%s)
 fi
-echo --结束时间：${END_TIME}，共$((END_SECONDS - START_SECONDS))秒
+echo --Completion Time: ${END_TIME}, $((END_SECONDS - START_SECONDS)) seconds.

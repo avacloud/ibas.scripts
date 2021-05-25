@@ -7,5 +7,5 @@ LABEL maintainer="Niuren.Zhu <niuren.zhu@icloud.com>"
 # 获取脚本
 RUN set -x \
     && cd ${CODE_HOME} \
-    && git clone https://github.com/avacloud/ibas.scripts.git \
+    && git clone --depth 1 https://github.com/avacloud/ibas.scripts.git \
     && find ./ibas.scripts/ -name "*.sh" -exec chmod +x {} \;
