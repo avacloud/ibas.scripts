@@ -1,2 +1,1 @@
-ibas_cloud/ibas.businessbydesign
 ibas_cloud/ibas.businessone
