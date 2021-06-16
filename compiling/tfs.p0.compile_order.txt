@@ -1,3 +1,2 @@
-ibas_project/ibas.datasync
 ibas_project/ibas.tuojiashi
 ibas_cloud/ibas.businessbydesign
