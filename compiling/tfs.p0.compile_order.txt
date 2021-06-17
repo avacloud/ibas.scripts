@@ -1,2 +1,3 @@
 ibas_project/ibas.tuojiashi
+ibas_project/ibas.jingcheng
 ibas_cloud/ibas.businessbydesign
