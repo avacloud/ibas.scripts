@@ -15,6 +15,7 @@ echo '      -u [user]      tfs user.                                            
 echo '      -p [password]  tfs password.                                         '
 echo '      -d [version]   deploy packages to repository,                         '
 echo '                         version default value is today.                    '
+echo '      -s             code files is stored in /dev/shm .                     '
 echo '****************************************************************************'
 # 设置参数变量
 while getopts ":qrd:u:p:" arg; do
@@ -34,6 +35,9 @@ while getopts ":qrd:u:p:" arg; do
         ;;
     p)
         TFS_PWD=$OPTARG
+        ;;
+    s)
+        STORED_SHM=y
         ;;
     esac
 done
@@ -81,12 +85,15 @@ if [ "${QUIET_MODE}" != "y" ]; then
         read -p "---tfs password:" TFS_PWD
     fi
     if [ "${DEPLOY}" = "" ]; then
-        read -p "--deploy war packages to repository? (yes or [n]o):" DEPLOY
+        read -p "---deploy war packages to repository? (yes or [n]o):" DEPLOY
         if [ "${DEPLOY}" = "y" ]; then
             if [ "${VERSION}" = "" ]; then
-                read -p "---packages version ($(date +%Y%m%d%H%M)):" VERSION
+                read -p "----packages version ($(date +%Y%m%d%H%M)):" VERSION
             fi
         fi
+    fi
+    if [ "${STORED_SHM}" = "" ]; then
+        read -p "---code files is stored in /dev/shm? (yes or [n]o):" STORED_SHM
     fi
 fi
 
@@ -132,6 +139,19 @@ if [ "${TFS_URL}" = "" ]; then
 fi
 if [ "${MAVEN_URL}" = "" ]; then
     MAVEN_URL=http://nexus.avacloud.com.cn/repository/maven-releases
+fi
+
+# 使用虚拟磁盘
+if [ "${STORED_SHM}" = "y" ]; then
+    SHM_HOME=/dev/shm/codes/
+
+    mkdir -p ${SHM_HOME}/git
+    chmod -R 1775 ${SHM_HOME}/git
+    ln -bfsv ${SHM_HOME}/git ${CODE_HOME}/git
+
+    mkdir -p ${SHM_HOME}/tfs
+    chmod -R 1775 ${SHM_HOME}/tfs
+    ln -bfsv ${SHM_HOME}/tfs ${CODE_HOME}/tfs
 fi
 
 echo --get btulz.scripts
