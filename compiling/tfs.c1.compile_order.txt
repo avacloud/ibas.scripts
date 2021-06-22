@@ -1,11 +1,8 @@
 ibas_cloud/ibas.achievementmanagement
-ibas_cloud/ibas.alipay
 ibas_cloud/ibas.commoditycenter
 ibas_cloud/ibas.channelmanagement
 ibas_cloud/ibas.dealer
-ibas_cloud/ibas.homedesign
 ibas_cloud/ibas.humanresources
-ibas_cloud/ibas.message
 ibas_cloud/ibas.membercenter
 ibas_cloud/ibas.marketingpromotion
 ibas_cloud/ibas.formdesign

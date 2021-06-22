@@ -1,1 +1,5 @@
 ibas_cloud/ibas.businessone
+ibas_cloud/ibas.message
+ibas_cloud/ibas.homedesign
+ibas_cloud/ibas.alipay
+ibas_cloud/ibas.wechatpay
