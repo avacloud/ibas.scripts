@@ -3,6 +3,7 @@
 *_log_*.txt
 *.tmp
 *.tar
+*.zip
 /compiling/copy_wars.sh
 /compiling/deploy_wars.sh
 compile_order.txt
