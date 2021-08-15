@@ -2,3 +2,4 @@ ibas_project/ibas.tuojiashi
 ibas_project/ibas.jingcheng
 ibas_project/ibas.dayinruikang
 ibas_project/ibas.qixubeibei
+ibas_project/ibas.huangjia
