@@ -1,0 +1,14 @@
+# escape=`
+# windows server core
+FROM avacloud/tomcat:ibas-wincore
+
+# 安装B1 DI API
+ARG B1_REPOSITORY=http://nexus.avacloud.com.cn/repository/software/sap/b1/
+ARG B1_VERSION=9.3PL14
+
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "${Env:B1_REPOSITORY}/DI_API_${Env:B1_VERSION}_x64.7z" -OutFile 'C:\DI_API.7z'; `
+    Start-Process -FilePath "7z.exe" -ArgumentList 'x', 'C:\DI_API.7z', '-oC:\temp' -Wait -NoNewWindow -Passthru; `
+    Start-Process -FilePath 'C:\temp\DI API\setup.exe' -ArgumentList "/S","/v/qn" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\DI_API.7z'; `
+    Remove-Item -Force -LiteralPath 'C:\temp' -Recurse;

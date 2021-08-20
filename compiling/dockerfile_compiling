@@ -1,14 +1,10 @@
-# ubuntu
+# alpine
 FROM colorcoding/compiling:ibas-gtf-alpine as builder
 
-# 维护者
-LABEL maintainer="Niuren.Zhu <niuren.zhu@icloud.com>"
-
 # 安装Bash
-RUN apk update \
-    && apk upgrade \
-    && apk add --no-cache bash bash-doc bash-completion \
-    && rm -rf /var/cache/apk/* \
+RUN apk add --no-cache bash bash-doc bash-completion \
+    && rm -rf /var/cache/apk/ \
+    && rm -rf /tmp/*.apk \
     && /bin/bash
 
 # 获取脚本

@@ -1,6 +1,9 @@
 # alpine
-FROM colorcoding/tomcat:ibas-alpine as builder
+FROM colorcoding/tomcat:ibas-alpine
 
-# 维护者
-LABEL maintainer="Niuren.Zhu <niuren.zhu@icloud.com>"
-
+# 安装环境
+RUN set -x \
+    # 安装字体
+    && curl -sL https://raw.githubusercontent.com/avacloud/fonts/master/chiness/STSong.ttf -O \
+    && cp -f STSong.ttf /usr/share/fonts/ \
+    && rm -rf ./STSong.ttf

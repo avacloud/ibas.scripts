@@ -1,0 +1,106 @@
+# escape=`
+# windows server core
+FROM colorcoding/tomcat:ibas-wincore
+
+# 使用Powershell
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# 安装系统环境
+# 请自行准备oledlg.dll
+COPY oledlg_x64.dll C:\windows\System32\oledlg.dll
+COPY oledlg_x86.dll C:\windows\SysWOW64\oledlg.dll
+
+# Visual C++ 2005 Redistributable Package
+# https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x86.exe
+# https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# Visual C++ 2008 Redistributable Package
+# https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe
+# https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# Visual C++ 2010 Redistributable Package
+# https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe
+# https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# Visual C++ 2012 Redistributable Package
+# https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe
+# https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# Visual C++ 2013 Redistributable Package
+# https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
+# https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# Visual C++ 2015 Redistributable Package
+# https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe
+# https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe" -OutFile 'C:\vcredist_x86.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x86.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe" -OutFile 'C:\vcredist_x64.exe'; `
+    Start-Process -FilePath 'C:\vcredist_x64.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x86.exe'; `
+    Remove-Item -Force -LiteralPath 'C:\vcredist_x64.exe';
+
+# .NET Framework 4.5.2
+# https://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe" -OutFile 'C:\NDP452-x86-x64-AllOS-ENU.exe'; `
+    Start-Process -FilePath 'C:\NDP452-x86-x64-AllOS-ENU.exe' -ArgumentList "/q" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\NDP452-x86-x64-AllOS-ENU.exe';
+
+# SQL Server 2012 Native Client
+# https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x86/sqlncli.msi
+# https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x86/sqlncli.msi" -OutFile 'C:\sqlncli_x86.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/i",'C:\sqlncli_x86.msi',"/qn","IACCEPTSQLNCLILICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi" -OutFile 'C:\sqlncli_x64.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\sqlncli_x64.msi',"/qn","IACCEPTSQLNCLILICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\sqlncli_x86.msi'; `
+    Remove-Item -Force -LiteralPath 'C:\sqlncli_x64.msi';
+
+# OLE DB Driver 18 for SQL Server
+# https://download.microsoft.com/download/A/9/8/A98CF446-A38E-4B0A-A967-F93FAB474AE0/en-US/18.3.0.0/x86/msoledbsql.msi
+# https://download.microsoft.com/download/A/9/8/A98CF446-A38E-4B0A-A967-F93FAB474AE0/en-US/18.3.0.0/x64/msoledbsql.msi
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/A/9/8/A98CF446-A38E-4B0A-A967-F93FAB474AE0/en-US/18.3.0.0/x86/msoledbsql.msi" -OutFile 'C:\msoledbsql_x86.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/i",'C:\msoledbsql_x86.msi',"/qn","IACCEPTMSOLEDBSQLLICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/A/9/8/A98CF446-A38E-4B0A-A967-F93FAB474AE0/en-US/18.3.0.0/x64/msoledbsql.msi" -OutFile 'C:\msoledbsql_x64.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\msoledbsql_x64.msi',"/qn","IACCEPTMSOLEDBSQLLICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\msoledbsql_x86.msi'; `
+    Remove-Item -Force -LiteralPath 'C:\msoledbsql_x64.msi';
