@@ -14,3 +14,8 @@ RUN Start-Process -FilePath 'C:\Packages\DI API\setup.exe' -ArgumentList "/S","/
         Write-Host 'FAILED installing DI API!' ; exit 1; `
     }; `
     Remove-Item -Force -LiteralPath 'C:\Packages' -Recurse;
+
+# 复制DI JCO到共享目录
+RUN New-Item -Path 'C:/apache-tomcat/' -Name ibas_lib -Type Directory; `
+    Copy-Item 'C:/Program Files/SAP/SAP Business One DI API/JCO/LIB/sboapi.jar' 'C:/apache-tomcat/ibas_lib/sboapi-latest.jar'; `
+    Copy-Item 'C:/Program Files/SAP/SAP Business One DI API/JCO/LIB/sbowrapper.jar' 'C:/apache-tomcat/ibas_lib/sbowrapper-latest.jar';

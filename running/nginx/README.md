@@ -6,3 +6,7 @@
 ~~~
 docker build --force-rm -f ./dockerfile -t avacloud/nginx:ibas-alpine ./
 ~~~
+* nginx:ibas-wincore
+~~~
+docker build --force-rm -f ./dockerfile-wincore -t avacloud/nginx:ibas-wincore ./
+~~~

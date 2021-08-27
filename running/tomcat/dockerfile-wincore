@@ -6,3 +6,12 @@ FROM colorcoding/tomcat:ibas-wincore
 # 请自行准备oledlg.dll
 COPY oledlg_x64.dll C:\windows\System32\oledlg.dll
 COPY oledlg_x86.dll C:\windows\SysWOW64\oledlg.dll
+
+
+# SQL Server 2012 Native Client
+# https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x86/sqlncli.msi
+# https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi" -OutFile 'C:\sqlncli_x64.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\sqlncli_x64.msi',"/qn","IACCEPTSQLNCLILICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\sqlncli_x64.msi';

@@ -1,0 +1,5 @@
+# escape=`
+# windows server core
+FROM colorcoding/nginx:ibas-wincore
+
+
