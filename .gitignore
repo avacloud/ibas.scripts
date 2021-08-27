@@ -4,17 +4,20 @@
 *.tmp
 *.tar
 *.zip
+*.dll
+*.7z
 /compiling/copy_wars.sh
 /compiling/deploy_wars.sh
 compile_order.txt
 
 # folder
-*/release/
-*/logs/
-*/log/
-*/btulz.scripts/
-*/git/
-*/tfs/
+release/
+logs/
+log/
+btulz.scripts/
+git/
+tfs/
+Packages/
 
 # mac os files
 .DS_Store
