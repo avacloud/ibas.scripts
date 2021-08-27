@@ -1,0 +1,16 @@
+# escape=`
+# windows server core
+FROM avacloud/tomcat:ibas-wincore
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# 拷贝安装包
+# 注意：需要包含安装包里的[Prerequisites]和[DI API]目录
+ADD Packages C:\Packages
+
+# 安装B1 DI API
+RUN Start-Process -FilePath 'C:\Packages\DI API\setup.exe' -ArgumentList "/S","/v/qn" -Wait -NoNewWindow -PassThru; `
+    IF ((Test-Path 'C:\Program Files\SAP\SAP Business One DI API') -ne 'True') { `
+        Write-Host 'FAILED installing DI API!' ; exit 1; `
+    }; `
+    Remove-Item -Force -LiteralPath 'C:\Packages' -Recurse;
