@@ -7,11 +7,42 @@ FROM colorcoding/tomcat:ibas-wincore
 COPY oledlg_x64.dll C:\windows\System32\oledlg.dll
 COPY oledlg_x86.dll C:\windows\SysWOW64\oledlg.dll
 
-
 # SQL Server 2012 Native Client
 # https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x86/sqlncli.msi
 # https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi
 RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
     Invoke-WebRequest -Uri "https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x64/sqlncli.msi" -OutFile 'C:\sqlncli_x64.msi'; `
     Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\sqlncli_x64.msi',"/qn","IACCEPTSQLNCLILICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
-    Remove-Item -Force -LiteralPath 'C:\sqlncli_x64.msi';
+    Remove-Item -Force -LiteralPath 'C:\sqlncli_x64.msi'; `
+    Remove-Item -Force -Recurse -Path "${Env:Temp}\*.*";
+
+# ODBC Driver for SQL Server
+# https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x86/msodbcsql.msi
+# https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x64/msodbcsql.msi
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x64/msodbcsql.msi" -OutFile 'C:\msodbcsql_x64.msi'; `
+    Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\msodbcsql_x64.msi',"/qn","IACCEPTMSODBCSQLLICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
+    Remove-Item -Force -LiteralPath 'C:\msodbcsql_x64.msi'; `
+    Remove-Item -Force -Recurse -Path "${Env:Temp}\*.*";
+
+# ODBC Driver for HANA
+# https://tools.hana.ondemand.com/additional/hanaclient-latest-windows-x64.zip
+# cookies: eula_3_1_agreed  tools.hana.ondemand.com/developer-license-3_1.txt    tools.hana.ondemand.com
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+    $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession; `
+    $cookie = New-Object System.Net.Cookie; `
+    $cookie.Name = 'eula_3_1_agreed'; `
+    $cookie.Value = 'tools.hana.ondemand.com/developer-license-3_1.txt'; `
+    $cookie.Domain = 'tools.hana.ondemand.com'; `
+    $session.Cookies.Add($cookie); `
+    Invoke-WebRequest -Uri "https://tools.hana.ondemand.com/additional/hanaclient-latest-windows-x64.zip"  -WebSession $session -OutFile 'C:\hanaclient_x64.zip'; `
+    Expand-Archive -LiteralPath 'C:\hanaclient_x64.zip' -DestinationPath 'C:\hanaclient_x64'; `
+    Remove-Item 'C:\hanaclient_x64\client\*TGZ*' -Exclude 'ODBC*','SQLDBC*','SAPSYS*'; `
+    Remove-Item 'C:\hanaclient_x64\client\excel' -Recurse; `
+    Start-Process -FilePath 'C:\hanaclient_x64\hdbinst.exe' -ArgumentList '-b' -NoNewWindow -Wait -PassThru; `
+    IF ((Test-Path 'C:\Program Files\sap\hdbclient') -ne 'True') { `
+        Write-Host 'FAILED installing HDB Client!' ; exit 1; `
+    }; `
+    Remove-Item -Force -Recurse -Path 'C:\hanaclient_x64'; `
+    Remove-Item -Force -Path 'C:\hanaclient_x64.zip'; `
+    Remove-Item -Force -Recurse -Path "${Env:Temp}\*.*";
