@@ -39,6 +39,7 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tl
     Expand-Archive -LiteralPath 'C:\hanaclient_x64.zip' -DestinationPath 'C:\hanaclient_x64'; `
     Remove-Item 'C:\hanaclient_x64\client\*TGZ*' -Exclude 'ODBC*','SQLDBC*','SAPSYS*'; `
     Remove-Item 'C:\hanaclient_x64\client\excel' -Recurse; `
+    Remove-Item 'C:\hanaclient_x64\excel' -Recurse; `
     Start-Process -FilePath 'C:\hanaclient_x64\hdbinst.exe' -ArgumentList '-b' -NoNewWindow -Wait -PassThru; `
     IF ((Test-Path 'C:\Program Files\sap\hdbclient') -ne 'True') { `
         Write-Host 'FAILED installing HDB Client!' ; exit 1; `

@@ -11,6 +11,9 @@ echo '    4. deploy wars.                                                       
 echo '  parameter:                                                                '
 echo '      -q             quiet mode, no interaction.                           '
 echo '      -r             replace maven setting file.                           '
+echo '      -i [id]        maven id.                                             '
+echo '      -m [user]      maven user.                                           '
+echo '      -w [password]  maven password.                                       '
 echo '      -u [user]      tfs user.                                             '
 echo '      -p [password]  tfs password.                                         '
 echo '      -d [version]   deploy packages to repository,                         '
@@ -35,6 +38,15 @@ while getopts ":qrd:u:p:" arg; do
         ;;
     p)
         TFS_PWD=$OPTARG
+        ;;
+    i)
+        MAVEN_ID=$OPTARG
+        ;;
+    m)
+        MAVEN_USER=$OPTARG
+        ;;
+    w)
+        MAVEN_PWD=$OPTARG
         ;;
     s)
         STORED_SHM=y
@@ -78,6 +90,23 @@ if [ "${QUIET_MODE}" != "y" ]; then
     if [ "${REPLACE}" = "" ]; then
         read -p "---replace maven setting? (yes or [n]o):" REPLACE
     fi
+    if [ "${REPLACE}" = "y" ]; then
+        if [ "${MAVEN_ID}" = "" ]; then
+            read -p "----maven server id ([ibas-maven]):" MAVEN_ID
+            if [ "${MAVEN_ID}" = "" ]; then
+                MAVEN_ID=ibas-maven
+            fi
+        fi
+        if [ "${MAVEN_USER}" = "" ]; then
+            read -p "----maven server user ([admin]):" MAVEN_USER
+            if [ "${MAVEN_USER}" = "" ]; then
+                MAVEN_USER=admin
+            fi
+        fi
+        if [ "${MAVEN_PWD}" = "" ]; then
+            read -p "----maven server user password:" MAVEN_PWD
+        fi
+    fi
     if [ "${TFS_USER}" = "" ]; then
         read -p "---tfs user ("\\" must be "\\\\"):" TFS_USER
     fi
@@ -93,13 +122,16 @@ if [ "${QUIET_MODE}" != "y" ]; then
         fi
     fi
     if [ "${STORED_SHM}" = "" ]; then
-        read -p "---code files is stored in /dev/shm? (yes or [n]o):" STORED_SHM
+        read -p "---compiles files is stored in /dev/shm? (yes or [n]o):" STORED_SHM
     fi
 fi
 
 : <<!
 echo Quiet: ${QUIET_MODE}
 echo Replace: ${REPLACE}
+echo Maven Id: ${MAVEN_ID}
+echo Maven User: ${MAVEN_USER}
+echo Maven Password: ${MAVEN_PWD}
 echo Deploy: ${DEPLOY} and Version ${VERSION}
 echo TFS User: ${TFS_USER}
 echo TFS Password: ${TFS_PWD}
@@ -109,8 +141,22 @@ exit 1
 # 配置文件替换
 if [ "${REPLACE}" = "y" ]; then
     if [ -e ${MAVEN_HOME}/conf/settings.xml ]; then
-        cp -f ${WORK_FOLDER}/conf/maven.settings.xml ${MAVEN_HOME}/conf/settings.xml
+        cp -f ${MAVEN_HOME}/conf/settings.xml ${MAVEN_HOME}/conf/settings.bak.xml
+        rm -rf ${MAVEN_HOME}/conf/settings.xml
     fi
+    cat >${MAVEN_HOME}/conf/settings.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>${MAVEN_ID}</id>
+      <username>${MAVEN_USER}</username>
+      <password>${MAVEN_PWD}</password>
+    </server>
+  </servers>
+</settings>
+EOF
 fi
 # TFS配置
 if [ "${TFS_USER}" != "" ]; then
@@ -143,15 +189,15 @@ fi
 
 # 使用虚拟磁盘
 if [ "${STORED_SHM}" = "y" ]; then
-    SHM_HOME=/dev/shm/codes/
+    SHM_HOME=/dev/shm/codes
 
     mkdir -p ${SHM_HOME}/git
     chmod -R 1775 ${SHM_HOME}/git
-    ln -bfsv ${SHM_HOME}/git ${CODE_HOME}/git
+    # ln -bfsv ${SHM_HOME}/git ${CODE_HOME}/git
 
     mkdir -p ${SHM_HOME}/tfs
     chmod -R 1775 ${SHM_HOME}/tfs
-    ln -bfsv ${SHM_HOME}/tfs ${CODE_HOME}/tfs
+    # ln -bfsv ${SHM_HOME}/tfs ${CODE_HOME}/tfs
 fi
 
 echo --get btulz.scripts
@@ -202,6 +248,15 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
             cd ${CODE_FOLDER}/${folder} && git pull --depth 1
         else
             git clone --depth 1 ${GIT_URL}/${collection}/${folder}.git ${others}
+        fi
+        # 使用虚拟磁盘
+        if [ "${STORED_SHM}" = "y" ]; then
+            if [ -e "${CODE_FOLDER}/${folder}/compile_order.txt" ]; then
+                while read item; do
+                    rm -rf ${CODE_FOLDER}/${folder}/${item}/target
+                    mkdir -p ${SHM_HOME}/${folder}/${item}/target && ln -bfsv ${SHM_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
+                done <"${CODE_FOLDER}/${folder}/compile_order.txt" | sed 's/\r//g'
+            fi
         fi
         echo ${folder} >>${CODE_FOLDER}/compile_order.txt
     done <${WORK_FOLDER}/${COMPILE_ORDER} | sed 's/\r//g'
@@ -263,6 +318,16 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
             cd ${CODE_FOLDER}/${folder} && git tf pull --rebase
         else
             git tf clone ${TFS_URL}/${collection} /${folder} ${CODE_FOLDER}/${folder}
+        fi
+        # 使用虚拟磁盘
+        if [ "${STORED_SHM}" = "y" ]; then
+            if [ -e "${CODE_FOLDER}/${folder}" ]; then
+                cd ${CODE_FOLDER}/${folder}
+                for item in $(ls -l | grep ^d); do
+                    rm -rf ${CODE_FOLDER}/${folder}/${item}/target
+                    mkdir -p ${SHM_HOME}/${folder}/${item}/target && ln -bfsv ${SHM_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
+                done
+            fi
         fi
         echo ${folder} >>${CODE_FOLDER}/compile_order.txt
     done <${WORK_FOLDER}/${COMPILE_ORDER} | sed 's/\r//g'
