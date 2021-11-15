@@ -155,6 +155,15 @@ if [ "${REPLACE}" = "y" ]; then
       <password>${MAVEN_PWD}</password>
     </server>
   </servers>
+  <mirrors>
+    <mirror>
+        <id>maven-default-http-blocker</id>
+        <mirrorOf>external:http2:*</mirrorOf>
+        <name>Disable HTTP blocked. (Replace http to http2)</name>
+        <url>http://0.0.0.0/</url>
+        <blocked>true</blocked>
+    </mirror>
+  </mirrors>
 </settings>
 EOF
 fi
@@ -198,6 +207,11 @@ if [ "${STORED_SHM}" = "y" ]; then
     mkdir -p ${SHM_HOME}/tfs
     chmod -R 1775 ${SHM_HOME}/tfs
     # ln -bfsv ${SHM_HOME}/tfs ${CODE_HOME}/tfs
+fi
+
+echo --clear maven repository
+if [ -e ~/.m2/repository/org/colorcoding ]; then
+    rm -rf ~/.m2/repository/org/colorcoding
 fi
 
 echo --get btulz.scripts
