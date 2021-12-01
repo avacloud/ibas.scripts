@@ -190,7 +190,7 @@ if [ "${GIT_URL}" = "" ]; then
     GIT_URL=https://github.com
 fi
 if [ "${TFS_URL}" = "" ]; then
-    TFS_URL=http://tfs.avatech.com.cn:8080/tfs
+    TFS_URL=https://code.avacloud.com.cn:8443/tfs
 fi
 if [ "${MAVEN_URL}" = "" ]; then
     MAVEN_URL=http://nexus.avacloud.com.cn/repository/maven-releases
