@@ -11,6 +11,6 @@ color-coding/ibas.accounting
 color-coding/ibas.approvalprocess
 color-coding/ibas.businesspartner
 color-coding/ibas.materials
+color-coding/ibas.receiptpayment
 color-coding/ibas.purchase
 color-coding/ibas.sales
-color-coding/ibas.receiptpayment
