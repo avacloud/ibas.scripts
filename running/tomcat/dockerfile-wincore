@@ -16,11 +16,11 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tl
     Remove-Item -Force -LiteralPath 'C:\sqlncli_x64.msi'; `
     Remove-Item -Force -Recurse -Path "${Env:Temp}\*.*";
 
-# ODBC Driver for SQL Server
-# https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x86/msodbcsql.msi
-# https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x64/msodbcsql.msi
+# ODBC Driver for SQL Server 13.1
+# https://download.microsoft.com/download/D/5/E/D5EEF288-A277-45C8-855B-8E2CB7E25B96/x86/msodbcsql.msi
+# https://download.microsoft.com/download/D/5/E/D5EEF288-A277-45C8-855B-8E2CB7E25B96/x64/msodbcsql.msi
 RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
-    Invoke-WebRequest -Uri "https://download.microsoft.com/download/a/e/b/aeb7d4ff-ca20-45db-86b8-8a8f774ce97b/en-US/17.8.1.1/x64/msodbcsql.msi" -OutFile 'C:\msodbcsql_x64.msi'; `
+    Invoke-WebRequest -Uri "https://download.microsoft.com/download/D/5/E/D5EEF288-A277-45C8-855B-8E2CB7E25B96/x64/msodbcsql.msi" -OutFile 'C:\msodbcsql_x64.msi'; `
     Start-Process -FilePath "msiexec.exe" -ArgumentList '/i', 'C:\msodbcsql_x64.msi',"/qn","IACCEPTMSODBCSQLLICENSETERMS=YES" -Wait -NoNewWindow -PassThru; `
     Remove-Item -Force -LiteralPath 'C:\msodbcsql_x64.msi'; `
     Remove-Item -Force -Recurse -Path "${Env:Temp}\*.*";
@@ -38,8 +38,6 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tl
     Invoke-WebRequest -Uri "https://tools.hana.ondemand.com/additional/hanaclient-latest-windows-x64.zip"  -WebSession $session -OutFile 'C:\hanaclient_x64.zip'; `
     Expand-Archive -LiteralPath 'C:\hanaclient_x64.zip' -DestinationPath 'C:\hanaclient_x64'; `
     Remove-Item 'C:\hanaclient_x64\client\*TGZ*' -Exclude 'ODBC*','SQLDBC*','SAPSYS*'; `
-    Remove-Item 'C:\hanaclient_x64\client\excel' -Recurse; `
-    Remove-Item 'C:\hanaclient_x64\excel' -Recurse; `
     Start-Process -FilePath 'C:\hanaclient_x64\hdbinst.exe' -ArgumentList '-b' -NoNewWindow -Wait -PassThru; `
     IF ((Test-Path 'C:\Program Files\sap\hdbclient') -ne 'True') { `
         Write-Host 'FAILED installing HDB Client!' ; exit 1; `
