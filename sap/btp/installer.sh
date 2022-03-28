@@ -141,5 +141,6 @@ EOF
 fi
 echo "Code Home: ${CODE_HOME}"
 echo ---
+export LESSCHARSET=utf-8
 # exit
 echo "--please exit the terminal to reload environment variables !!!"

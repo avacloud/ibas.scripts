@@ -110,8 +110,10 @@ if [ "${QUIET_MODE}" != "y" ]; then
     if [ "${TFS_USER}" = "" ]; then
         read -p "---tfs user ("\\" must be "\\\\"):" TFS_USER
     fi
-    if [ "${TFS_PWD}" = "" ]; then
-        read -p "---tfs password:" TFS_PWD
+    if [ "${TFS_USER}" != "" ]; then
+        if [ "${TFS_PWD}" = "" ]; then
+            read -p "---tfs password:" TFS_PWD
+        fi
     fi
     if [ "${DEPLOY}" = "" ]; then
         read -p "---deploy war packages to repository? (yes or [n]o):" DEPLOY
@@ -170,9 +172,9 @@ fi
 # TFS配置
 if [ "${TFS_USER}" != "" ]; then
     git config --global git-tf.server.username "${TFS_USER}"
-fi
-if [ "${TFS_PWD}" != "" ]; then
-    git config --global git-tf.server.password "${TFS_PWD}"
+    if [ "${TFS_PWD}" != "" ]; then
+        git config --global git-tf.server.password "${TFS_PWD}"
+    fi
 fi
 # 检查部署war包时的版本号
 if [ "${DEPLOY}" = "y" ]; then
@@ -259,7 +261,7 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
         folder=${folder##*/}
 
         if [ -e "${CODE_FOLDER}/${folder}/.git" ]; then
-            cd ${CODE_FOLDER}/${folder} && git pull --depth 1
+            cd ${CODE_FOLDER}/${folder} && git pull --rebase
         else
             git clone --depth 1 ${GIT_URL}/${collection}/${folder}.git ${others}
         fi
@@ -277,7 +279,7 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
     cd ${CODE_FOLDER}
     ./builds.sh && ./compiles.sh
     # 清理编译临时文件
-    find . -name "target" -type d -exec rm -rf {} \; >/dev/null
+    find . -name "target" -type d | xargs rm -rf >/dev/null
     # 存在脚本则上传war包
     if [ "${DEPLOY}" = "y" ]; then
         echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
@@ -312,7 +314,7 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
     if [ ! -e ${CODE_FOLDER}/ibas-typescript ]; then
         git clone --depth 1 ${GIT_URL}/color-coding/ibas-typescript.git
     else
-        cd ${CODE_FOLDER}/ibas-typescript && git pull --depth 1
+        cd ${CODE_FOLDER}/ibas-typescript && git pull --rebase
     fi
     cd ${CODE_FOLDER}
     chmod +x ibas-typescript/*.sh && ibas-typescript/build_all.sh
@@ -348,7 +350,7 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
     cd ${CODE_FOLDER}
     ./builds.sh && ./compiles.sh
     # 清理编译临时文件
-    find . -name "target" -type d -exec rm -rf {} \; >/dev/null
+    find . -name "target" -type d | xargs rm -rf >/dev/null
     # 存在脚本则上传war包
     if [ "${DEPLOY}" = "y" ]; then
         echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
