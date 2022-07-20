@@ -6,10 +6,6 @@
 ~~~
 docker build --force-rm -f ./dockerfile_compiling -t avacloud/compiling:ibas-alpine ./
 ~~~
-* developing:ibas
-~~~
-docker build --force-rm -f ./dockerfile_developing -t avacloud/developing:ibas ./
-~~~
 * clone_build_complie_deploy.sh
 ~~~
 git*.compile_order.txt          使用git命令获取代码的项目清单

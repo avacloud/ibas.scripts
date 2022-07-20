@@ -1,8 +1,0 @@
-# ubuntu
-FROM colorcoding/developing:ibas as builder
-
-# 获取脚本
-RUN set -x \
-    && cd ${CODE_HOME} \
-    && git clone --depth 1 https://github.com/avacloud/ibas.scripts.git \
-    && find ./ibas.scripts/ -name "*.sh" -exec chmod +x {} \;

@@ -1,0 +1,2 @@
+http://nexus.avacloud.com.cn/repository/maven-releases/org/colorcoding/apps/ibas.root.service/202207120542/ibas.root.service-202207120542.war
+http://nexus.avacloud.com.cn/repository/maven-releases/org/colorcoding/apps/ibas.initialfantasy.service/202207120542/ibas.initialfantasy.service-202207120542.war

@@ -1,0 +1,21 @@
+# alpine
+FROM avacloud/nginx:ibas-alpine
+
+# 拷贝程序包清单
+ADD packages.txt ${NGINX_HOME}/packages.txt
+
+# 现在并释放包文件
+RUN set -x \
+    && mkdir -p ${NGINX_HOME}/ibas_packages && cd ${NGINX_HOME}/ibas_packages \
+    && \ 
+    while read package; do  \
+    echo -- ${package} && curl -fsSL --retry 3 -O ${package}; \
+    done <${NGINX_HOME}/packages.txt | sed 's/\r//g' | sed 's/\n//g' \
+    && cd ${NGINX_HOME} && mkdir -p ${NGINX_HOME}/ibas_lib \
+    && ./deploy_apps.sh \
+    # 修正目录及清理文件
+    && mv ${NGINX_HOME}/webapps/ROOT ${NGINX_HOME}/webapps/root \
+    && find ${NGINX_HOME}/webapps/ -name "*-INF" -type d | xargs rm -rf \
+    && rm -rf ${NGINX_HOME}/ibas_packages \
+    && rm -rf ${NGINX_HOME}/ibas_lib \
+    && rm -rf ${NGINX_HOME}/ibas

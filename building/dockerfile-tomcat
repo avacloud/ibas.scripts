@@ -1,0 +1,15 @@
+# alpine
+FROM avacloud/tomcat:ibas-alpine
+
+# 拷贝程序包清单
+ADD packages.txt ${CATALINA_HOME}/packages.txt
+
+# 现在并释放包文件
+RUN set -x \
+    && mkdir -p ${CATALINA_HOME}/ibas_packages && cd ${CATALINA_HOME}/ibas_packages \
+    && \
+    while read package; do  \
+    echo -- ${package} && curl -fsSL --retry 3 -O ${package}; \
+    done <${CATALINA_HOME}/packages.txt | sed 's/\r//g' | sed 's/\n//g' \
+    && cd ${CATALINA_HOME} \
+    && ./deploy_apps.sh
