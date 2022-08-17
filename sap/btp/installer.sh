@@ -113,25 +113,6 @@ if [ "$?" != "0" ]; then
     exit 1
 fi
 echo ---
-# tee clc
-TEE_VERSION=14.123.1
-if [ ! -e ${HOME}/.tee-clc ]; then
-    curl -L https://github.com/Microsoft/team-explorer-everywhere/releases/download/${TEE_VERSION}/TEE-CLC-${TEE_VERSION}.zip -O &&
-        unzip -q -o TEE-CLC-${TEE_VERSION}.zip -d ${HOME} &&
-        mv -f ${HOME}/TEE-CLC-${TEE_VERSION} ${HOME}/.tee-clc &&
-        rm -rf TEE-CLC-${TEE_VERSION}.zip
-    cat >${HOME}/.profile.d/tf.sh <<EOF
-export PATH="${HOME}/.tee-clc:$PATH"
-EOF
-fi
-PATH="${HOME}/.tee-clc:$PATH"
-echo tee clc:
-echo $(tf eula -accept)
-if [ "$?" != "0" ]; then
-    echo please install tee clc.
-    exit 1
-fi
-echo ---
 # code home
 export CODE_HOME=${HOME}/projects
 if [ ! -e ${HOME}/.profile.d/codes.sh ]; then

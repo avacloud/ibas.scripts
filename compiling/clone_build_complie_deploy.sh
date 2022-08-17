@@ -142,11 +142,11 @@ exit 1
 
 # 配置文件替换
 if [ "${REPLACE}" = "y" ]; then
-    if [ -e ${MAVEN_HOME}/conf/settings.xml ]; then
-        cp -f ${MAVEN_HOME}/conf/settings.xml ${MAVEN_HOME}/conf/settings.bak.xml
-        rm -rf ${MAVEN_HOME}/conf/settings.xml
+    if [ -e ~/.m2/conf/settings.xml ]; then
+        cp -f ~/.m2/conf/settings.xml ~/.m2/conf/settings.bak.xml
+        rm -rf ~/.m2/conf/settings.xml
     fi
-    cat >${MAVEN_HOME}/conf/settings.xml <<EOF
+    cat >~/.m2/conf/settings.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
