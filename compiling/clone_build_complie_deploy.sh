@@ -49,7 +49,7 @@ while getopts ":qrd:u:p:" arg; do
         MAVEN_PWD=$OPTARG
         ;;
     s)
-        STORED_SHM=y
+        STORED_TMP=y
         ;;
     esac
 done
@@ -123,8 +123,8 @@ if [ "${QUIET_MODE}" != "y" ]; then
             fi
         fi
     fi
-    if [ "${STORED_SHM}" = "" ]; then
-        read -p "---compiles files is stored in /dev/shm? (yes or [n]o):" STORED_SHM
+    if [ "${STORED_TMP}" = "" ]; then
+        read -p "---compiles files is stored in /tmp? (yes or [n]o):" STORED_TMP
     fi
 fi
 
@@ -199,16 +199,14 @@ if [ "${MAVEN_URL}" = "" ]; then
 fi
 
 # 使用虚拟磁盘
-if [ "${STORED_SHM}" = "y" ]; then
-    SHM_HOME=/dev/shm/codes
+if [ "${STORED_TMP}" = "y" ]; then
+    TMP_HOME=/tmp/codes
 
-    mkdir -p ${SHM_HOME}/git
-    chmod -R 1775 ${SHM_HOME}/git
-    # ln -bfsv ${SHM_HOME}/git ${CODE_HOME}/git
+    mkdir -p ${TMP_HOME}/git
+    ln -bfsv ${TMP_HOME}/git ${CODE_HOME}/git
 
-    mkdir -p ${SHM_HOME}/tfs
-    chmod -R 1775 ${SHM_HOME}/tfs
-    # ln -bfsv ${SHM_HOME}/tfs ${CODE_HOME}/tfs
+    mkdir -p ${TMP_HOME}/tfs
+    ln -bfsv ${TMP_HOME}/tfs ${CODE_HOME}/tfs
 fi
 
 echo --clear maven repository
@@ -266,11 +264,11 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
             git clone --depth 1 ${GIT_URL}/${collection}/${folder}.git ${others}
         fi
         # 使用虚拟磁盘
-        if [ "${STORED_SHM}" = "y" ]; then
+        if [ "${STORED_TMP}" = "y" ]; then
             if [ -e "${CODE_FOLDER}/${folder}/compile_order.txt" ]; then
                 while read item; do
                     rm -rf ${CODE_FOLDER}/${folder}/${item}/target
-                    mkdir -p ${SHM_HOME}/${folder}/${item}/target && ln -bfsv ${SHM_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
+                    mkdir -p ${TMP_HOME}/${folder}/${item}/target && ln -bfsv ${TMP_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
                 done <"${CODE_FOLDER}/${folder}/compile_order.txt" | sed 's/\r//g'
             fi
         fi
@@ -336,12 +334,12 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
             git tf clone ${TFS_URL}/${collection} /${folder} ${CODE_FOLDER}/${folder}
         fi
         # 使用虚拟磁盘
-        if [ "${STORED_SHM}" = "y" ]; then
+        if [ "${STORED_TMP}" = "y" ]; then
             if [ -e "${CODE_FOLDER}/${folder}" ]; then
                 cd ${CODE_FOLDER}/${folder}
                 for item in $(ls -l | grep ^d); do
                     rm -rf ${CODE_FOLDER}/${folder}/${item}/target
-                    mkdir -p ${SHM_HOME}/${folder}/${item}/target && ln -bfsv ${SHM_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
+                    mkdir -p ${TMP_HOME}/${folder}/${item}/target && ln -bfsv ${TMP_HOME}/${folder}/${item}/target ${CODE_FOLDER}/${folder}/${item}/target
                 done
             fi
         fi
