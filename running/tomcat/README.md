@@ -13,3 +13,7 @@ copy /y %WINDIR%\System32\oledlg.dll %CD%\oledlg_x64.dll
 copy /y %WINDIR%\SysWOW64\oledlg.dll %CD%\oledlg_x86.dll
 docker build --force-rm -f ./dockerfile-wincore -t avacloud/tomcat:ibas-wincore ./
 ~~~
+* tomcat:crviewer-alpine (水晶报表查看)
+~~~
+docker build --force-rm -f ./dockerfile-crviewer -t avacloud/tomcat:crviewer-alpine ./
+~~~
