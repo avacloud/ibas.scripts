@@ -1,4 +1,5 @@
 ibas_cloud/ibas.businessone
+ibas_cloud/ibas.crystalreports
 ibas_cloud/ibas.message
 ibas_cloud/ibas.homedesign
 ibas_cloud/ibas.alipay
