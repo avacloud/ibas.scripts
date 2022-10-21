@@ -13,6 +13,7 @@ RUN set -x \
     done <${NGINX_HOME}/packages.txt | sed 's/\r//g' | sed 's/\n//g' \
     && cd ${NGINX_HOME} && mkdir -p ${NGINX_HOME}/ibas_lib \
     && ./deploy_apps.sh \
+	&& rm -rf ${CATALINA_HOME}/ibas_packages \
     # 修正目录及清理文件
     && mv ${NGINX_HOME}/webapps/ROOT ${NGINX_HOME}/webapps/root \
     && find ${NGINX_HOME}/webapps/ -name "*-INF" -type d | xargs rm -rf \

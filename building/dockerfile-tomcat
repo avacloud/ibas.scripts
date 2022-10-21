@@ -9,7 +9,10 @@ RUN set -x \
     && mkdir -p ${CATALINA_HOME}/ibas_packages && cd ${CATALINA_HOME}/ibas_packages \
     && \
     while read package; do  \
-    echo -- ${package} && curl -fsSL --retry 3 -O ${package}; \
+    curl -fsSL --retry 3 -O ${package} \
+    && echo ${package} | awk -F "/" '{print $NF}' >>ibas.deploy.order.txt; \
     done <${CATALINA_HOME}/packages.txt | sed 's/\r//g' | sed 's/\n//g' \
+    && echo "packages and order" && cat ibas.deploy.order.txt \
     && cd ${CATALINA_HOME} \
-    && ./deploy_apps.sh
+    && ./deploy_apps.sh \
+    && rm -rf ${CATALINA_HOME}/ibas_packages
