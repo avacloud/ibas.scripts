@@ -6,3 +6,6 @@ ibas_cloud/ibas.costaccounting
 ibas_cloud/ibas.salesopportunity
 ibas_cloud/ibas.masterdata
 ibas_cloud/ibas.userdefine
+ibas_cloud/ibas.groupfinancemanagement
+ibas_cloud/ibas.cargos
+ibas_cloud/ibas.graphicsreportanalysis
