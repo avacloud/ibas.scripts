@@ -1,0 +1,2 @@
+ibas_cloud/ibas.manufacturing
+ibas_cloud/ibas.manufacturingoutsourcing
