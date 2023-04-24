@@ -22,7 +22,7 @@ PATH="${HOME}/.local/bin:\$PATH"
 if [ -d ${HOME}/.profile.d ]; then
     for i in ${HOME}/.profile.d/*.sh; do
         if [ -r \$i ]; then
-            . \$i
+           source \$i
         fi
     done
     unset i
@@ -53,12 +53,12 @@ if [ "$?" != "0" ]; then
     echo please install maven.
     exit 1
 fi
-export MAVEN_HOME=${HOME}/.m2
 if [ ! -e ${HOME}/.profile.d/mvn.sh ]; then
     cat >${HOME}/.profile.d/mvn.sh <<EOF
-export MAVEN_HOME=${MAVEN_HOME}
+export MAVEN_HOME=${HOME}/.m2
 EOF
 fi
+source ${HOME}/.profile.d/mvn.sh
 mkdir -p ${MAVEN_HOME}/conf/
 if [ -f ${MAVEN_HOME}/settings.xml ]; then
     if [ ! -h ${MAVEN_HOME}/settings.xml ]; then
@@ -102,11 +102,14 @@ if [ ! -e ${HOME}/.git-tf ]; then
         unzip -q -o git-tf-${GIT_TF_VERSION}.zip -d ${HOME} &&
         mv -f ${HOME}/git-tf-${GIT_TF_VERSION} ${HOME}/.git-tf &&
         rm -rf git-tf-${GIT_TF_VERSION}.zip
+    EOF
+fi
+if [ ! -e ${HOME}/.profile.d/git-tf.sh ]; then
     cat >${HOME}/.profile.d/git-tf.sh <<EOF
-export PATH="${HOME}/.git-tf:$PATH"
+export PATH="${HOME}/.git-tf:\$PATH"
 EOF
 fi
-PATH="${HOME}/.git-tf:$PATH"
+source ${HOME}/.profile.d/git-tf.sh
 echo $(git-tf --version)
 if [ "$?" != "0" ]; then
     echo please install git-tf.
@@ -114,12 +117,12 @@ if [ "$?" != "0" ]; then
 fi
 echo ---
 # code home
-export CODE_HOME=${HOME}/projects
 if [ ! -e ${HOME}/.profile.d/codes.sh ]; then
     cat >${HOME}/.profile.d/codes.sh <<EOF
-export CODE_HOME=${CODE_HOME}
+export CODE_HOME=${HOME}/projects
 EOF
 fi
+source ${HOME}/.profile.d/codes.sh
 echo "Code Home: ${CODE_HOME}"
 echo ---
 export LESSCHARSET=utf-8

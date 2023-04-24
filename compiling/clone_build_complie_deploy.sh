@@ -60,19 +60,14 @@ START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 echo --Start Time：${START_TIME}
 echo --Work Folder：${WORK_FOLDER}
 
-# 检查环境
+# 检查命令是否有效
 echo --checking tools
 mvn -version
 if [ "$?" != "0" ]; then
     echo please install maven.
     exit 1
 fi
-echo Npm Version $(npm -v)
-if [ "$?" != "0" ]; then
-    echo please install nodejs and npm.
-    exit 1
-fi
-echo TypeScript $(tsc -v)
+echo -n "TypeScript " && tsc -v
 if [ "$?" != "0" ]; then
     echo please run [npm install -g typescript].
     exit 1
@@ -80,6 +75,11 @@ fi
 uglifyjs -V
 if [ "$?" != "0" ]; then
     echo please run [npm install -g uglify-es].
+    exit 1
+fi
+git-tf --version
+if [ "$?" != "0" ]; then
+    echo please install git-tf.
     exit 1
 fi
 
