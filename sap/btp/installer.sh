@@ -115,6 +115,13 @@ if [ "$?" != "0" ]; then
     echo please install git-tf.
     exit 1
 fi
+# git
+if [ ! -e ${HOME}/.profile.d/git.sh ]; then
+    cat >${HOME}/.profile.d/git.sh <<EOF
+export LESSCHARSET=utf-8
+EOF
+fi
+source ${HOME}/.profile.d/git.sh
 echo ---
 # code home
 if [ ! -e ${HOME}/.profile.d/codes.sh ]; then
@@ -125,6 +132,4 @@ fi
 source ${HOME}/.profile.d/codes.sh
 echo "Code Home: ${CODE_HOME}"
 echo ---
-export LESSCHARSET=utf-8
 # exit
-echo "--please exit the terminal to reload environment variables !!!"
