@@ -37,16 +37,24 @@ fi
 
 # 检查环境
 echo --checking tools
-# swtich to java 8
-if [ ! -e /extbin/bin/java8 ]; then
-    echo please install java 8.
-    exit 1
+if [ "${ASDF_DIR}" = "" ]; then
+    # no asdf
+    # swtich to java 8
+    if [ ! -e /extbin/bin/java8 ]; then
+        echo please install java 8.
+        exit 1
+    fi
+    if [ ! -e ${HOME}/java8 ]; then
+        mkdir -p ${HOME}/java8
+        ln -s /extbin/bin/java8 ${HOME}/java8/bin
+    fi
+    ${HOME}/java8/bin/set-default
+else
+    # has asdf
+    # install java 8
+    JAVA_VERSION="adoptopenjdk-8.0.392+8"
+    asdf install java ${JAVA_VERSION} && asdf global java ${JAVA_VERSION}
 fi
-if [ ! -e ${HOME}/java8 ]; then
-    mkdir -p ${HOME}/java8
-    ln -s /extbin/bin/java8 ${HOME}/java8/bin
-fi
-${HOME}/java8/bin/set-default
 # maven setting
 mvn -version
 if [ "$?" != "0" ]; then
@@ -102,7 +110,6 @@ if [ ! -e ${HOME}/.git-tf ]; then
         unzip -q -o git-tf-${GIT_TF_VERSION}.zip -d ${HOME} &&
         mv -f ${HOME}/git-tf-${GIT_TF_VERSION} ${HOME}/.git-tf &&
         rm -rf git-tf-${GIT_TF_VERSION}.zip
-    EOF
 fi
 if [ ! -e ${HOME}/.profile.d/git-tf.sh ]; then
     cat >${HOME}/.profile.d/git-tf.sh <<EOF
