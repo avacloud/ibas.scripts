@@ -21,4 +21,4 @@ RUN set -x \
     && rm -rf ./crystalreport
 
 # 恢复tomat的jsp检查
-COPY conf/* ${CATALINA_HOME}/conf/
+COPY conf/context.xml ${CATALINA_HOME}/conf/context.xml

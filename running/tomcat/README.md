@@ -17,3 +17,7 @@ docker build --force-rm -f ./dockerfile-wincore -t avacloud/tomcat:ibas-wincore 
 ~~~
 docker build --force-rm -f ./dockerfile-crviewer -t avacloud/tomcat:crviewer-alpine ./
 ~~~
+* tomcatinx:ibas-alpine (Tomat:8080 + Nginx:80)
+~~~
+docker build --force-rm -f ./dockerfile-nginx -t avacloud/tomcatinx:ibas-alpine ./
+~~~
