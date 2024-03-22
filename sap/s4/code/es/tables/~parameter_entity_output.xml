@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ArrayList>
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+	xmlns:ns3="http://colorcoding.org/btulz/transformers">
+	<!-- 数据类型说明 -->
+	<OutputMapping Name="abap.type" Binding="Property" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>abap.cuky</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+			<Condition Property="Name" Operation="END_WITH" Value="Currency" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.unit</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+			<Condition Property="Name" Operation="EQUAL" Value="UOM" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.char(${Property.getEditSize()})</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.string(256)</Content>
+			<Condition Property="DataType" Value="Memo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.int8</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Long" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.int2</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Short" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.int4</Content>
+			<Condition Property="DataType" Value="Numeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.int1</Content>
+			<Condition Property="DataType" Value="Date" />
+			<Condition Property="DataSubType" Value="Time" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.dats</Content>
+			<Condition Property="DataType" Value="Date" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.quan(12,4)</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Quantity" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.curr(12,2)</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Price" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.dec</Content>
+			<Condition Property="DataType" Value="Decimal" />
+		</OutputItem>
+		<OutputItem>
+			<Content>abap.raw</Content>
+			<Condition Property="DataType" Value="Bytes" />
+		</OutputItem>
+	</OutputMapping>
+	<!-- 字段默认值 -->
+	<OutputMapping Name="abap.value" Binding="Property" Unmatched="SKIP">
+		<OutputItem>
+			<Content>not null</Content>
+			<Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+			<Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+		</OutputItem>
+	</OutputMapping>
+</ns3:ArrayList>

@@ -1,0 +1,9 @@
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: '${Model.getName()}'
+define root view entity Z${Model.getName()} as
+  select from z${Model.getMapped().toLowerCase()}
+{
+$BEGIN_MODEL_PROPERTY$
+  ${Property.output(key)}${Property.getMapped().toLowerCase()} as ${Property.getName()} ${Property.output(,)}
+$END_MODEL_PROPERTY$
+}

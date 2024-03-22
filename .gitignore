@@ -6,6 +6,7 @@
 *.zip
 *.dll
 *.7z
+*.jar
 /compiling/copy_wars.sh
 /compiling/deploy_wars.sh
 compile_order.txt
@@ -18,6 +19,10 @@ btulz.scripts/
 git/
 tfs/
 Packages/
+temp/
+tmp/
+history/
+ibas_classic/
 
 # mac os files
 .DS_Store

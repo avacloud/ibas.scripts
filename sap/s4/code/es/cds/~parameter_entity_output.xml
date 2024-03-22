@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ArrayList>
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+	xmlns:ns3="http://colorcoding.org/btulz/transformers">
+	<!-- 主键标记 -->
+	<OutputMapping Name="key" Binding="Property" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>key </Content>
+			<Condition Property="PrimaryKey" Value="true" />
+		</OutputItem>
+		<OutputItem>
+			<Content></Content>
+		</OutputItem>
+	</OutputMapping>
+	<!-- 分割符 -->
+	<OutputMapping Name="," Binding="Property" Unmatched="SKIP">
+		<OutputItem>
+			<Content>,</Content>
+			<Condition Property="Last" Operation="NOT_EQUAL" Value="true" />
+		</OutputItem>
+	</OutputMapping>
+</ns3:ArrayList>
