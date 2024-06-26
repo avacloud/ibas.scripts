@@ -1,9 +1,9 @@
 #!/bin/bash
 echo '****************************************************************************'
 echo '              clone_build_complie_deploy.sh                                 '
-echo '                           by Niuren.Zhu                                    '
-echo '                           2021.03.19                                       '
-echo '  note：                                                                     '
+echo '                           by niuren.zhu                                    '
+echo '                              2021.03.19                                    '
+echo '  note:                                                                     '
 echo '    1. clone from GitHub.                                                    '
 echo '    2. clone from TFS.                                                       '
 echo '    3. builds & complies.                                                   '
@@ -57,8 +57,8 @@ done
 WORK_FOLDER=$(pwd)
 # 开始时间
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
-echo --Start Time：${START_TIME}
-echo --Work Folder：${WORK_FOLDER}
+echo --Start Time:${START_TIME}
+echo --Work Folder:${WORK_FOLDER}
 
 # 检查命令是否有效
 echo --checking tools

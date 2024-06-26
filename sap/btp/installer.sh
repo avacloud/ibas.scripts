@@ -28,9 +28,19 @@ if [ -d ${HOME}/.profile.d ]; then
     unset i
 fi
 
+# user's container files
+if [ -e ${HOME}/.local/share/containers/storage ]; then
+    mkdir -p /tmp/containers/
+    if [ ! -e /tmp/containers/storage ]; then
+        mv ${HOME}/.local/share/containers/storage /tmp/containers/
+    fi
+    rm -rf ${HOME}/.local/share/containers/storage
+    ln -s /tmp/containers/storage ${HOME}/.local/share/containers/storage
+fi
+
 # no proxy
-no_proxy=\$no_proxy,.microsoft.com,.avatech.com.cn,.avacloud.com.cn
-NO_PROXY=\$NO_PROXY,.microsoft.com,.avatech.com.cn,.avacloud.com.cn
+no_proxy=\$no_proxy,.microsoft.com,.avatech.com.cn,.avacloud.com.cn,.apache.org,.sourceforge.net
+NO_PROXY=\$NO_PROXY,.microsoft.com,.avatech.com.cn,.avacloud.com.cn,.apache.org,.sourceforge.net
 
 EOF
 fi
@@ -101,8 +111,8 @@ fi
 echo ---
 # user's path
 PATH="${HOME}/.local/bin:$PATH"
-no_proxy=$no_proxy,.microsoft.com,.avatech.com.cn,.avacloud.com.cn
-NO_PROXY=$NO_PROXY,.microsoft.com,.avatech.com.cn,.avacloud.com.cn
+no_proxy=$no_proxy,.microsoft.com,.avatech.com.cn,.avacloud.com.cn,.apache.org,.sourceforge.net
+NO_PROXY=$NO_PROXY,.microsoft.com,.avatech.com.cn,.avacloud.com.cn,.apache.org,.sourceforge.net
 # git-tf
 GIT_TF_VERSION=2.0.3.20131219
 if [ ! -e ${HOME}/.git-tf ]; then
