@@ -1,21 +1,40 @@
 # escape=`
-# windows server core
+# windows server core 2016
 FROM avacloud/tomcat:ibas-wincore
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 # 拷贝安装包
-# 注意：需要包含安装包里的[Prerequisites]和[DI API]目录
+# 注意：
+#    目录[Prerequisites]: 所有依赖文件
+#    目录[DI API]: DI安装文件，必须64位版本
+#    目录[SLDAgentMSI_x64]: 云版代理文件，必须64位版本，可选
 ADD Packages C:\Packages
 
-# 安装B1 DI API
+# 安装DI API
 RUN Start-Process -FilePath 'C:\Packages\DI API\setup.exe' -ArgumentList "/S","/v/qn" -Wait -NoNewWindow -PassThru; `
     IF ((Test-Path 'C:\Program Files\SAP\SAP Business One DI API') -ne 'True') { `
-        Write-Host 'FAILED installing DI API!' ; exit 1; `
+    Write-Host 'FAILED installing DI API!' ; exit 1; `
+    };
+
+# 安装SLD Agent
+ARG SLDaddress=''
+RUN IF ((Test-Path 'C:\Packages\SLDAgentMSI_x64\SLDAgent_x64.exe') -eq 'True') { `
+    Start-Process -FilePath 'C:\Packages\SLDAgentMSI_x64\SLDAgent_x64.exe' -ArgumentList "/S","/v/qn" -Wait -NoNewWindow -PassThru; `
+    IF ((Test-Path 'C:\Program Files\SAP\SAP Business One SLD Agent') -ne 'True') { `
+    Write-Host 'FAILED installing SLD Agent!' ; exit 1; `
     }; `
-    Remove-Item -Force -LiteralPath 'C:\Packages' -Recurse;
+    IF (${Env:SLDaddress} -ne '') { `
+    New-ItemProperty -Path 'HKLM:\SOFTWARE\SAP\SAP Manage' -Name 'SLDaddress' -Value "${Env:SLDaddress}" -PropertyType EXPANDString  -Force; `
+    }`
+    }
 
 # 复制DI JCO到共享目录
-RUN New-Item -Path 'C:/apache-tomcat/' -Name ibas_lib -Type Directory; `
-    Copy-Item 'C:/Program Files/SAP/SAP Business One DI API/JCO/LIB/sboapi.jar' 'C:/apache-tomcat/ibas_lib/sboapi-latest.jar'; `
-    Copy-Item 'C:/Program Files/SAP/SAP Business One DI API/JCO/LIB/sbowrapper.jar' 'C:/apache-tomcat/ibas_lib/sbowrapper-latest.jar';
+RUN IF ((Test-Path 'C:\apache-tomcat\ibas_lib') -ne 'True') { `
+    New-Item -Path 'C:\apache-tomcat\' -Name 'ibas_lib' -Type Directory; `
+    } `
+    Copy-Item 'C:\Program Files\SAP\SAP Business One DI API\JCO\LIB\sboapi.jar' 'C:\apache-tomcat\ibas_lib\sboapi-latest.jar'; `
+    Copy-Item 'C:\Program Files\SAP\SAP Business One DI API\JCO\LIB\sbowrapper.jar' 'C:\apache-tomcat\ibas_lib\sbowrapper-latest.jar';
+
+# 清理文件
+RUN cmd /S /C 'RD /S /Q "C:\Packages" && DEL /F /S /Q "%TEMP%\*.*"'

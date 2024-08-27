@@ -1,5 +1,5 @@
 # escape=`
-# windows server core
+# windows server core 2016
 FROM colorcoding/tomcat:ibas-wincore
 
 # 安装系统环境
@@ -27,12 +27,12 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tl
 
 # ODBC Driver for HANA
 # https://tools.hana.ondemand.com/additional/hanaclient-latest-windows-x64.zip
-# cookies: eula_3_1_agreed  tools.hana.ondemand.com/developer-license-3_1.txt    tools.hana.ondemand.com
+# cookies: eula_3_2_agreed  tools.hana.ondemand.com/developer-license-3_2.txt    tools.hana.ondemand.com
 RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
     $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession; `
     $cookie = New-Object System.Net.Cookie; `
-    $cookie.Name = 'eula_3_1_agreed'; `
-    $cookie.Value = 'tools.hana.ondemand.com/developer-license-3_1.txt'; `
+    $cookie.Name = 'eula_3_2_agreed'; `
+    $cookie.Value = 'tools.hana.ondemand.com/developer-license-3_2.txt'; `
     $cookie.Domain = 'tools.hana.ondemand.com'; `
     $session.Cookies.Add($cookie); `
     Invoke-WebRequest -Uri "https://tools.hana.ondemand.com/additional/hanaclient-latest-windows-x64.zip"  -WebSession $session -OutFile 'C:\hanaclient_x64.zip'; `

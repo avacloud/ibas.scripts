@@ -6,7 +6,6 @@ B1 DI运行环境
 ~~~
 REM 注意：从B1的安装包中拷贝[Prerequisites]和[DI API]文件夹到[.\Packages]目录。
 docker build --force-rm -f ./dockerfile-wincore-b1di -t avacloud/tomcat:ibas-b193-14 ./
+REM 注意：如果安装SLD代理，则使用此参数修改地址
+docker build --force-rm -f ./dockerfile-wincore-b1di -t avacloud/tomcat:ibas-b193-14 --build-arg SLDaddress="https://b1c-server.com/sld/sld0100.svc" ./
 ~~~
-注意：使用时需要在注册表中注册SLD地址
-HKLM:\SOFTWARE\SAP\SAP Manage
-SLDaddress = https://b1c-server.avacloud.cc/sld/sld0100.svc
