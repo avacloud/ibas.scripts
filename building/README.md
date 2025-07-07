@@ -2,11 +2,24 @@
 构建应用的镜像
 
 ## 主要内容 | content
-* nginx:vstore-[yyyy][mm][dd][hh][mm]
+* [customer]/avacloud/nginx:[yyyy][mm][dd][hh][mm]
 ~~~
-docker build --force-rm -f ./dockerfile-nginx -t avacloud/nginx:vstore-202207120542 ./
+docker build -f ./dockerfile-nginx -t c00001/avacloud/nginx:202207120542 ./
 ~~~
-* tomcat:vstore-[yyyy][mm][dd][hh][mm]
+* [customer]/avacloud/tomcat:[yyyy][mm][dd][hh][mm]
 ~~~
-docker build --force-rm -f ./dockerfile-tomcat -t avacloud/tomcat:vstore-202207120542 ./
+docker build -f ./dockerfile-tomcat -t c00001/avacloud/tomcat:202207120542 ./
 ~~~
+* [customer]/avacloud/nginx:[yyyy][mm][dd][hh][mm]
+~~~
+docker build -f ./dockerfile-upgrade-nginx -t c00006/avacloud/nginx:202507070542 \
+  --build-arg BASE_IMAGE="repo.avacloud.com.cn/c00006/avacloud/nginx:202207120542" \
+  ./
+~~~
+* [customer]/avacloud/tomcat:[yyyy][mm][dd][hh][mm]
+~~~
+docker build -f ./dockerfile-upgrade-tomcat -t c00001/avacloud/tomcat:202507070542 \
+  --build-arg BASE_IMAGE="c00001/avacloud/tomcat:202207120542" \
+  ./
+~~~
+

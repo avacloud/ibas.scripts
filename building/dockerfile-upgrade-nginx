@@ -1,0 +1,9 @@
+# 保留tomcat应用内容，升级基础镜像
+ARG BASE_IMAGE="c00006/avacloud/nginx"
+FROM $BASE_IMAGE AS baseImage
+
+FROM avacloud/nginx:ibas-alpine
+
+# 复制应用
+COPY --from=baseImage ${NGINX_HOME}/*.sh ${NGINX_HOME}/
+COPY --from=baseImage ${NGINX_HOME}/webapps ${NGINX_HOME}/webapps

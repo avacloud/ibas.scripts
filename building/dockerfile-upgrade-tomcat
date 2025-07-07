@@ -1,0 +1,13 @@
+# 保留tomcat应用内容，升级基础镜像
+ARG BASE_IMAGE="c00006/avacloud/tomcat"
+FROM $BASE_IMAGE AS baseImage
+
+FROM avacloud/tomcat:ibas-alpine
+
+# 复制应用
+COPY --from=baseImage ${CATALINA_HOME}/*.sh ${CATALINA_HOME}/
+COPY --from=baseImage ${CATALINA_HOME}/ibas ${CATALINA_HOME}/ibas
+COPY --from=baseImage ${CATALINA_HOME}/ibas_lib ${CATALINA_HOME}/ibas_lib
+COPY --from=baseImage ${CATALINA_HOME}/ibas_tools ${CATALINA_HOME}/ibas_tools
+
+COPY --from=baseImage ${CATALINA_HOME}/webapps ${CATALINA_HOME}/webapps
