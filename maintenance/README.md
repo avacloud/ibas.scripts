@@ -11,3 +11,7 @@
 * openui5_unzip_packages.sh  解压openui5的压缩包
 ~~~
 ~~~
+* mysql_backup_database.sh  备份mysql数据库
+~~~
+ ./mysql_backup_database.sh -u root -p 1q2w3e -h "rm-2ze1sc6qr877owde8.mysql.rds.aliyuncs.com" -d "c00002-05 c00002-06"
+~~~
