@@ -23,6 +23,7 @@ temp/
 tmp/
 history/
 ibas_classic/
+container/
 
 # mac os files
 .DS_Store

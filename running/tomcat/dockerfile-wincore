@@ -4,8 +4,8 @@ FROM colorcoding/tomcat:ibas-wincore
 
 # 安装系统环境
 # 请自行准备oledlg.dll
-COPY oledlg_x64.dll C:\windows\System32\oledlg.dll
-COPY oledlg_x86.dll C:\windows\SysWOW64\oledlg.dll
+COPY container\Windows\System32\oledlg.dll C:\Windows\System32\oledlg.dll
+COPY container\Windows\SysWOW64\oledlg.dll C:\Windows\SysWOW64\oledlg.dll
 
 # SQL Server 2012 Native Client
 # https://download.microsoft.com/download/F/3/C/F3C64941-22A0-47E9-BC9B-1A19B4CA3E88/ENU/x86/sqlncli.msi
