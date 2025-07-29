@@ -15,7 +15,7 @@ echo '      -c [clear expired db]  clear expired backup database.               
 echo '      -e [backup expire day] backup expire day, defalut 14 days.            '
 echo '****************************************************************************'
 # 设置参数变量
-while getopts ":u:p:h:f:d:c:e" arg; do
+while getopts "u:p:h:f:d:e:c" arg; do
     case $arg in
     u)
         MYSQL_USER=$OPTARG
@@ -118,9 +118,12 @@ for DB_NAME in ${BACKUP_DATABASES}; do
 done
 
 # 如果开启了删除过期备份，则进行删除操作
-if [ "${CLEAR_EXPIRED_BACKUP}" == "ON" -a "${BACKUP_FOLDER}" != "" ]; then
-    echo "clear expired backup database."
-    find "${BACKUP_FOLDER}" -name "*.sql.gz" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
+if [ "${CLEAR_EXPIRED_BACKUP}" = "ON" ]; then
+    if [ -e "${BACKUP_FOLDER}" ];then
+        echo "clear expired backup database."
+        find "${BACKUP_FOLDER}" -name "*.sql.gz" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
+        find "${BACKUP_FOLDER}" -type d -empty -delete;
+    fi
 fi
 
 # 计算执行时间
