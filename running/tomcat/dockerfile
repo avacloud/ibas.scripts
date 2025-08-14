@@ -3,7 +3,7 @@ FROM colorcoding/tomcat:ibas-alpine
 
 # 安装环境
 RUN set -x \
-    # 安装字体
+    # 安装字体（华文宋体）
     && curl -sL http://nexus.avacloud.com.cn/repository/software/avatech/fonts/STSong.ttf -O \
     && cp -f STSong.ttf /usr/share/fonts/ \
     && rm -rf ./STSong.ttf

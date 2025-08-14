@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE configuration>
+<ns2:configuration xmlns:ns2="http://colorcoding.org/ibas/bobas/configuration">
+    <appSettings>
+        <!-- 配置项目-公司标记 -->
+        <add key="Company" value="AVA" />
+        <!-- 配置项目-是否开启调试模式 -->
+        <add key="DebugMode" value="true" />
+        <!-- 配置项目-语言编码 -->
+        <add key="LanguageCode" value="zh-CN" />
+        <!-- 配置项目-日志级别 -->
+        <add key="MessageLevel" value="DEBUG" />
+        <!-- 配置项目-数据库类型 -->
+        <add key="MasterDbType" value="MSSQL" />
+        <!-- 配置项目-数据库地址 -->
+        <add key="MasterDbServer" value="localhost" />
+        <!-- 配置项目-数据库名称 -->
+        <add key="MasterDbName" value="ibas_demo" />
+        <!-- 配置项目-数据库用户名称 -->
+        <add key="MasterDbUserID" value="sa" />
+        <!-- 配置项目-数据库用户密码 -->
+        <add key="MasterDbUserPassword" value="1q2w3e" />
+        <!-- 配置项目-序列化管理方式 -->
+        <add key="SerializationWay" value="jersey" />
+        <!-- 配置项目-对象删除前重新加载 -->
+        <add key="RefetchBeforeDelete" value="true" />
+        <!-- 配置项目-审批方法 -->
+        <add key="ApprovalWay" value="initial" />
+        <!-- 配置项目-组织方式 -->
+        <add key="OrganizationWay" value="initial" />
+        <!-- 配置项目-权限判断方式 -->
+        <add key="OwnershipWay" value="approval" />
+        <!-- 配置项目-配置方式 -->
+        <add key="ConfigurationWay" value="initial" />
+        <!-- 配置项目-转换者工厂，多个时“;”分隔 -->
+        <add key="TransformerFactory" value="JsonTransformer;XmlTransformer;ExcelTransformer;TransformerExcel;TransformerHtml;TransformerCrystalViewer;" />
+        <!-- 配置项目-连接管理员 -->
+        <add key="ConnectManager|SAP-B100" value="ConnectManagerDefault" />
+        <!-- 配置项目-连接管理员 -->
+        <add key="ConnectManager|TX-WX-02" value="ConnectManagerWechat" />
+        <!-- 配置项目-应用客户端-BYD -->
+        <add key="ApplicationClient|SAP-BYD" value="ByDesign" />
+        <!-- 配置项目-应用客户端-水晶报表 -->
+        <add key="ApplicationClient|SAP-BOCR" value="CrystalReportsViewer" />
+        <!-- 配置项目-启用登录验证 -->
+        <add key="EnableLoginVerification" value="false" />
+    </appSettings>
+</ns2:configuration>

@@ -1,24 +1,21 @@
 # alpine
 FROM avacloud/tomcat:ibas-alpine
 
-# 安装必须字体
-RUN apk add --no-cache msttcorefonts-installer \
-    && update-ms-fonts && fc-cache -f \
-    && curl -sL http://nexus.avacloud.com.cn/repository/software/avatech/fonts/fake_simsun.ttc -O \
-    && mv -f fake_simsun.ttc /usr/share/fonts/truetype/msttcorefonts/ \
-    && ln -s /usr/share/fonts/truetype/msttcorefonts /opt/java/openjdk/jre/lib/fonts \
-    && rm -rf /var/cache/apk/ \
-    && rm -rf /tmp/*.apk 
+# 安装常用字体
+RUN set -x \
+    && mkdir -p /opt/java/openjdk/jre/lib/fonts \
+    && curl --retry 3 -LfsSo /tmp/msfonts.tar.gz https://nexus.avacloud.com.cn/repository/software/avatech/fonts/msfonts.tar.gz \
+    && tar -xzvf /tmp/msfonts.tar.gz -C /opt/java/openjdk/jre/lib/fonts \
+    && rm /tmp/msfonts.tar.gz
 
 # 安装水晶报表运行库
 RUN set -x \
     && mkdir -p ${CATALINA_HOME}/webapps/crystalreports \
-    && curl -sL http://nexus.avacloud.com.cn/repository/software/avatech/crystalreport/CR4ERL28_0-80004572.ZIP -O \
-    && unzip -d ./crystalreport CR4ERL28_0-80004572.ZIP \
-    && rm -rf CR4ERL28_0-80004572.ZIP \
-    && cp -r ./crystalreport/crystalreportviewers ${CATALINA_HOME}/webapps/crystalreports/viewers \
-    && cp -r ./crystalreport/lib ${CATALINA_HOME}/webapps/crystalreports/jars \
-    && rm -rf ./crystalreport
+    && curl --retry 3 -LfsSo /tmp/cr4erl.zip https://nexus.avacloud.com.cn/repository/software/avatech/crystalreport/CR4ERL31_0-80004572.ZIP \
+    && unzip -o /tmp/cr4erl.zip -d /tmp/crystalreports \
+    && cp -r /tmp/crystalreports/crystalreportviewers ${CATALINA_HOME}/webapps/crystalreports/viewers \
+    && cp -r /tmp/crystalreports/lib ${CATALINA_HOME}/webapps/crystalreports/jars \
+    && rm -rf /tmp/cr4erl.zip /tmp/crystalreports
 
 # 恢复tomat的jsp检查
 COPY container/tomcat/conf/context.xml ${CATALINA_HOME}/conf/context.xml

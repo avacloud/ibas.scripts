@@ -195,7 +195,7 @@ if [ "${TFS_URL}" = "" ]; then
     TFS_URL=https://code.avacloud.com.cn:8443/tfs
 fi
 if [ "${MAVEN_URL}" = "" ]; then
-    MAVEN_URL=http://nexus.avacloud.com.cn/repository/maven-releases
+    MAVEN_URL=https://nexus.avacloud.com.cn/repository/maven-avacloud
 fi
 
 # 使用虚拟磁盘

@@ -1,0 +1,17 @@
+# basis packages (only for windows)
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.root.service/!APP_VERSION!/ibas.root.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.initialfantasy.service/!APP_VERSION!/ibas.initialfantasy.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.importexport.service/!APP_VERSION!/ibas.importexport.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.integration.service/!APP_VERSION!/ibas.integration.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.thirdpartyapp.service/!APP_VERSION!/ibas.thirdpartyapp.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.barcode.service/!APP_VERSION!/ibas.barcode.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.documents.service/!APP_VERSION!/ibas.documents.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.reportanalysis.service/!APP_VERSION!/ibas.reportanalysis.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.approvalprocess.service/!APP_VERSION!/ibas.approvalprocess.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.accounting.service/!APP_VERSION!/ibas.accounting.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.businesspartner.service/!APP_VERSION!/ibas.businesspartner.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.materials.service/!APP_VERSION!/ibas.materials.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.sales.service/!APP_VERSION!/ibas.sales.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.purchase.service/!APP_VERSION!/ibas.purchase.service-!APP_VERSION!.war
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.receiptpayment.service/!APP_VERSION!/ibas.receiptpayment.service-!APP_VERSION!.war
+# other packages

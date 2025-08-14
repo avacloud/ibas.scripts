@@ -1,0 +1,23 @@
+{
+  "appSettings": {
+    "company": "AVA",
+    "debug": true,
+    "offline": false,
+    "application": "AVA Cloud+",
+    "copyright": "© 2016-2025 avacloud.com.cn",
+    "helpUrl": "https://app.avacloud.com.cn/help",
+    "welcomeUrl": "https://app.avacloud.com.cn/welcome",
+    "welcomeImage": "sap-icon://hello-world",
+    "defalutServiceIcon": "sap-icon://e-care",
+    "defalutModuleIcon": "sap-icon://nutrition-activity",
+    "fullScreen|TABLET": true,
+    "queryPanelConfigurable|TABLET": false,
+    "queryPanelSelectable|TABLET": false,
+    "disableReportFunctions": true,
+    "defaultUser": "admin",
+    "defaultPassword": "1q2w3e",
+    "enableLoginVerification": false,
+    "enableRefreshLogout": false,
+    "repositoryAddress|BORepositoryShell": ".../initialfantasy/services/rest/data"
+  }
+}
