@@ -103,7 +103,7 @@ if [ ! -e "${TEMP_FOLDER}/btulz.scripts.tar" ]; then
 fi
 cd "${TOMCAT_FOLDER}" \
 && tar -xvf "${TEMP_FOLDER}/btulz.scripts.tar" \
-    --strip-components=1 ibas/deploy_apps.bat ibas/download_apps.bat ibas/initialize_apps.bat ibas/startcat.bat
+    --strip-components=1 ibas/deploy_apps.bat ibas/download_apps.bat ibas/initialize_apps.bat ibas/startcat.bat ibas/update_routing.bat
 cd "${WORK_FOLDER}"
 
 echo ---download: ${BTULZ_URL}
