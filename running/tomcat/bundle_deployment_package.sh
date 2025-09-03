@@ -24,12 +24,12 @@ done
 WORK_FOLDER=$(pwd)
 # 设置默认变量值
 if [ "${TOMCAT_VERSION}" = "" ]; then
-    TOMCAT_VERSION="9.0.108"
+    TOMCAT_VERSION="9.0.111"
 fi
 TOMCAT_URL="https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}-windows-x64.zip"
 
 if [ "${JAVA_URL}" = "" ]; then
-    JAVA_URL="http://maven.colorcoding.org/repository/software/java/ibm-semeru-open-jdk_x64_windows_8u452b09_openj9-0.51.0.zip"
+    JAVA_URL="http://maven.colorcoding.org/repository/software/java/ibm-semeru-open-jdk_x64_windows_8u472b08_openj9-0.56.0.zip"
 fi
 
 SCRIPTS_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.scripts/latest/btulz.scripts-latest.tar"
@@ -103,7 +103,7 @@ if [ ! -e "${TEMP_FOLDER}/btulz.scripts.tar" ]; then
 fi
 cd "${TOMCAT_FOLDER}" \
 && tar -xvf "${TEMP_FOLDER}/btulz.scripts.tar" \
-    --strip-components=1 ibas/deploy_apps.bat ibas/download_apps.bat ibas/initialize_apps.bat ibas/startcat.bat
+    --strip-components=1 ibas/deploy_apps.bat ibas/download_apps.bat ibas/initialize_apps.bat ibas/startcat.bat ibas/update_routing.bat
 cd "${WORK_FOLDER}"
 
 echo ---download: ${BTULZ_URL}

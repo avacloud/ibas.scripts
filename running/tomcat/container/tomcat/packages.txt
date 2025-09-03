@@ -1,4 +1,7 @@
-# basis packages (only for windows)
+# ***************************************
+# only for windows system
+# ***************************************
+# basis packages
 https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.root.service/!APP_VERSION!/ibas.root.service-!APP_VERSION!.war
 https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.initialfantasy.service/!APP_VERSION!/ibas.initialfantasy.service-!APP_VERSION!.war
 https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.importexport.service/!APP_VERSION!/ibas.importexport.service-!APP_VERSION!.war
