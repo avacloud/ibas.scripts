@@ -1,6 +1,9 @@
 # alpine
 FROM colorcoding/tomcat:ibas-alpine
 
+# 拷贝配置文件
+COPY container/tomcat/conf/web.xml ${CATALINA_HOME}/conf/
+
 # 安装环境
 RUN set -x \
     # 安装字体（华文宋体）

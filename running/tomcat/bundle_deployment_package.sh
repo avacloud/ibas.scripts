@@ -149,6 +149,19 @@ cd ${TEMP_FOLDER}
 zip -9 -q -r apache-tomcat-${TOMCAT_VERSION}-windows-x64_with_jdk.zip ./apache-tomcat-${TOMCAT_VERSION}/*
 cd ${WORK_FOLDER}
 
+# 创建分类包
+if [ -e "${WORK_FOLDER}/packages" ]; then
+    cd ${WORK_FOLDER}/packages
+    for PACKAGE_FILE in $(ls ${WORK_FOLDER}/packages); do
+        echo ---packaging: ${PACKAGE_FILE}
+        cp -f ${WORK_FOLDER}/packages/${PACKAGE_FILE} ${TOMCAT_FOLDER}/packages.txt
+        cd ${TEMP_FOLDER}
+        zip -9 -q -r apache-tomcat-${TOMCAT_VERSION}-windows-x64_with_jdk_${PACKAGE_FILE}.zip ./apache-tomcat-${TOMCAT_VERSION}/*
+    done
+    cd ${WORK_FOLDER}
+fi
+
+
 # 计算执行时间
 END_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 if [ "$(uname)" = "Darwin" ]; then
