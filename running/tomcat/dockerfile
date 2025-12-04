@@ -1,6 +1,13 @@
 # alpine
 FROM colorcoding/tomcat:ibas-alpine
 
+# 修改配置
+RUN set -x \
+    # 设置登录页
+    && sed -i '/<welcome-file-list>/a\
+    <welcome-file>login.html</welcome-file>\
+' "${CATALINA_HOME}/conf/web.xml"
+
 # 安装环境
 RUN set -x \
     # 安装字体（华文宋体）

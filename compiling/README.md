@@ -13,4 +13,6 @@ tfs*.compile_order.txt          使用git tf命令获取代码的项目清单
 ~~~
 # 生产配置
 export MAVEN_PACKAGE_ARGUMENTS=-Pprod
+# 前端不保留压缩前文件
+export TS_COMPRESS_NO_ORIGINAL=true
 ~~~

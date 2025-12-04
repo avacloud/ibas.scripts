@@ -59,7 +59,7 @@ echo --Start Time: ${START_TIME}
 
 TEMP_FOLDER=${WORK_FOLDER}/temp
 if [ -e "${TEMP_FOLDER}" ]; then
-    rm -rf "${TEMP_FOLDER}"
+   rm -rf "${TEMP_FOLDER}"
 fi
 mkdir -p "${TEMP_FOLDER}"
 
@@ -70,7 +70,7 @@ if [ ! -e "${TEMP_FOLDER}/tomcat.zip" ]; then
     echo not found tomcat package.
     exit 1
 fi
-unzip -q -d ${TEMP_FOLDER}/ ${TEMP_FOLDER}/tomcat.zip
+unzip -o -q -d ${TEMP_FOLDER}/ ${TEMP_FOLDER}/tomcat.zip
 TOMCAT_FOLDER=${TEMP_FOLDER}/apache-tomcat-${TOMCAT_VERSION}
 
 # 更新配置文件
@@ -92,7 +92,37 @@ mkdir -p ${TOMCAT_FOLDER}/ibas/logs
 mkdir -p ${TOMCAT_FOLDER}/ibas_lib
 mkdir -p ${TOMCAT_FOLDER}/ibas_tools
 mkdir -p ${TOMCAT_FOLDER}/ibas_packages
-rd /s /q ${TOMCAT_FOLDER}/webapps && mkdir -p ${TOMCAT_FOLDER}/webapps
+rm -rf ${TOMCAT_FOLDER}/webapps && mkdir -p ${TOMCAT_FOLDER}/webapps
+
+# 修改配置文件
+if [ "$(uname)" = "Darwin" ]; then
+# 设置jdk目录
+    sed -i '' '/Make sure prerequisite environment variables are set/a\
+if exist "%CATALINA_BASE%\\jdk" set "JAVA_HOME=%CATALINA_BASE%\\jdk"\
+' "${TOMCAT_FOLDER}/bin/setclasspath.bat"
+
+    sed -i '' '/Make sure prerequisite environment variables are set/a\
+if [ -e "$CATALINA_BASE/jdk" ]; then export JAVA_HOME="$CATALINA_BASE/jdk"; fi\
+' "${TOMCAT_FOLDER}/bin/setclasspath.sh"
+# 设置启动页
+    sed -i '' '/<welcome-file-list>/a\
+        <welcome-file>login.html</welcome-file>\
+' "${TOMCAT_FOLDER}/conf/web.xml"
+# 设置默认资源
+    sed -i "" 's/JvmMx=256/JvmMx=4096/g' "${TOMCAT_FOLDER}/bin/service.bat"
+else
+# 设置jdk目录
+    sed -i '/Make sure prerequisite environment variables are set/a\
+if exist "%CATALINA_BASE%\\jdk" set "JAVA_HOME=%CATALINA_BASE%\\jdk"' "${TOMCAT_FOLDER}/bin/setclasspath.bat"
+
+    sed -i '/Make sure prerequisite environment variables are set/a\
+if [ -e "$CATALINA_BASE/jdk" ]; then export JAVA_HOME="$CATALINA_BASE/jdk"; fi' "${TOMCAT_FOLDER}/bin/setclasspath.sh"
+# 设置启动页
+    sed -i '/<welcome-file-list>/a\
+        <welcome-file>login.html</welcome-file>' "${TOMCAT_FOLDER}/conf/web.xml"
+# 设置默认资源
+    sed -i 's/JvmMx=256/JvmMx=4096/g' "${TOMCAT_FOLDER}/bin/service.bat"
+fi
 
 # 增加运行脚本
 echo ---download: ${SCRIPTS_URL}
@@ -148,6 +178,19 @@ echo ---packaging: ${TOMCAT_FOLDER}
 cd ${TEMP_FOLDER}
 zip -9 -q -r apache-tomcat-${TOMCAT_VERSION}-windows-x64_with_jdk.zip ./apache-tomcat-${TOMCAT_VERSION}/*
 cd ${WORK_FOLDER}
+
+# 创建分类包
+if [ -e "${WORK_FOLDER}/packages" ]; then
+    cd ${WORK_FOLDER}/packages
+    for PACKAGE_FILE in $(ls ${WORK_FOLDER}/packages); do
+        echo ---packaging: ${PACKAGE_FILE}
+        cp -f ${WORK_FOLDER}/packages/${PACKAGE_FILE} ${TOMCAT_FOLDER}/packages.txt
+        cd ${TEMP_FOLDER}
+        zip -9 -q -r apache-tomcat-${TOMCAT_VERSION}-windows-x64_with_jdk_${PACKAGE_FILE}.zip ./apache-tomcat-${TOMCAT_VERSION}/*
+    done
+    cd ${WORK_FOLDER}
+fi
+
 
 # 计算执行时间
 END_TIME=$(date +'%Y-%m-%d %H:%M:%S')

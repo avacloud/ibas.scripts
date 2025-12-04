@@ -1,0 +1,57 @@
+# BUD1003 智能制造
+# APP0001 ibas-typescript
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.root.service/!APP_VERSION!/ibas.root.service-!APP_VERSION!.war
+# APP0002 ibas.initialfantasy
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.initialfantasy.service/!APP_VERSION!/ibas.initialfantasy.service-!APP_VERSION!.war
+# APP0003 ibas.importexport
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.importexport.service/!APP_VERSION!/ibas.importexport.service-!APP_VERSION!.war
+# APP0004 ibas.integration
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.integration.service/!APP_VERSION!/ibas.integration.service-!APP_VERSION!.war
+# APP0005 ibas.thirdpartyapp
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.thirdpartyapp.service/!APP_VERSION!/ibas.thirdpartyapp.service-!APP_VERSION!.war
+# APP0006 ibas.barcode
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.barcode.service/!APP_VERSION!/ibas.barcode.service-!APP_VERSION!.war
+# APP0007 ibas.documents
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.documents.service/!APP_VERSION!/ibas.documents.service-!APP_VERSION!.war
+# APP0008 ibas.reportanalysis
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.reportanalysis.service/!APP_VERSION!/ibas.reportanalysis.service-!APP_VERSION!.war
+# APP0009 ibas.approvalprocess
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.approvalprocess.service/!APP_VERSION!/ibas.approvalprocess.service-!APP_VERSION!.war
+# APP0010 ibas.accounting
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.accounting.service/!APP_VERSION!/ibas.accounting.service-!APP_VERSION!.war
+# APP0011 ibas.businesspartner
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.businesspartner.service/!APP_VERSION!/ibas.businesspartner.service-!APP_VERSION!.war
+# APP0012 ibas.materials
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.materials.service/!APP_VERSION!/ibas.materials.service-!APP_VERSION!.war
+# APP0013 ibas.sales
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.sales.service/!APP_VERSION!/ibas.sales.service-!APP_VERSION!.war
+# APP0014 ibas.purchase
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.purchase.service/!APP_VERSION!/ibas.purchase.service-!APP_VERSION!.war
+# APP0015 ibas.receiptpayment
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.receiptpayment.service/!APP_VERSION!/ibas.receiptpayment.service-!APP_VERSION!.war
+# APP0018 ibas.message
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.message.service/!APP_VERSION!/ibas.message.service-!APP_VERSION!.war
+# APP0047 ibas.officedocuments
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.officedocuments.service/!APP_VERSION!/ibas.officedocuments.service-!APP_VERSION!.war
+# APP0056 ibas.crystalreports
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.crystalreports.service/!APP_VERSION!/ibas.crystalreports.service-!APP_VERSION!.war
+# APP0071 ibas.jasperreports
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.jasperreports.service/!APP_VERSION!/ibas.jasperreports.service-!APP_VERSION!.war
+# APP0060 ibas.graphicsreportanalysis
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.graphicsreportanalysis.service/!APP_VERSION!/ibas.graphicsreportanalysis.service-!APP_VERSION!.war
+# APP0057 ibas.userdefine
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.userdefine.service/!APP_VERSION!/ibas.userdefine.service-!APP_VERSION!.war
+# APP0073 ibas.root
+https://nexus.avacloud.com.cn/repository/maven-releases/org/colorcoding/apps/ibas.root.service/e.1.0/ibas.root.service-e.1.0.war
+# APP0062 ibas.costaccounting
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.costaccounting.service/!APP_VERSION!/ibas.costaccounting.service-!APP_VERSION!.war
+# APP0064 ibas.manufacturing
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.manufacturing.service/!APP_VERSION!/ibas.manufacturing.service-!APP_VERSION!.war
+# APP0065 ibas.manufacturingoutsourcing
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.manufacturingoutsourcing.service/!APP_VERSION!/ibas.manufacturingoutsourcing.service-!APP_VERSION!.war
+# APP0066 ibas.manufacturingscheduling
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.manufacturingscheduling.service/!APP_VERSION!/ibas.manufacturingscheduling.service-!APP_VERSION!.war
+# APP0068 ibas.equipment
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.equipment.service/!APP_VERSION!/ibas.equipment.service-!APP_VERSION!.war
+# APP0035 ibas.qualitycontrol
+https://nexus.avacloud.com.cn/repository/maven-avacloud/org/colorcoding/apps/ibas.qualitycontrol.service/!APP_VERSION!/ibas.qualitycontrol.service-!APP_VERSION!.war

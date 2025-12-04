@@ -5,7 +5,7 @@
         <!-- 配置项目-公司标记 -->
         <add key="Company" value="AVA" />
         <!-- 配置项目-是否开启调试模式 -->
-        <add key="DebugMode" value="true" />
+        <add key="DebugMode" value="false" />
         <!-- 配置项目-语言编码 -->
         <add key="LanguageCode" value="zh-CN" />
         <!-- 配置项目-日志级别 -->
@@ -33,15 +33,13 @@
         <!-- 配置项目-配置方式 -->
         <add key="ConfigurationWay" value="initial" />
         <!-- 配置项目-转换者工厂，多个时“;”分隔 -->
-        <add key="TransformerFactory" value="JsonTransformer;XmlTransformer;ExcelTransformer;TransformerExcel;TransformerHtml;TransformerCrystalViewer;" />
-        <!-- 配置项目-连接管理员 -->
-        <add key="ConnectManager|SAP-B100" value="ConnectManagerDefault" />
-        <!-- 配置项目-连接管理员 -->
-        <add key="ConnectManager|TX-WX-02" value="ConnectManagerWechat" />
+        <add key="TransformerFactory" value="JsonTransformer;XmlTransformer;ExcelTransformer;TransformerExcel;TransformerHtml;TransformerCrystalViewer;TransformerJasperReports;" />
         <!-- 配置项目-应用客户端-BYD -->
         <add key="ApplicationClient|SAP-BYD" value="ByDesign" />
         <!-- 配置项目-应用客户端-水晶报表 -->
         <add key="ApplicationClient|SAP-BOCR" value="CrystalReportsViewer" />
+        <!-- 配置项目-应用客户端-贾斯博报表 -->
+        <add key="ApplicationClient|TIBCO-JASPER" value="JasperReportsViewer" />
         <!-- 配置项目-启用登录验证 -->
         <add key="EnableLoginVerification" value="false" />
     </appSettings>
