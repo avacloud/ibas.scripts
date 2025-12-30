@@ -19,3 +19,7 @@
 ~~~
  ./mysql_backup_database.sh -u root -p 1q2w3e -c ./app.xml
 ~~~
+* synchronize_code_files.sh  同步项tfs目集合代码，处理签出及新增。（适用已初始化项目）
+~~~
+ ./synchronize_code_files.sh ~/source ~/target
+~~~
