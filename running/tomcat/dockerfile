@@ -10,7 +10,10 @@ RUN set -x \
 
 # 安装环境
 RUN set -x \
-    # 安装字体（华文宋体）
-    && curl -sL http://nexus.avacloud.com.cn/repository/software/avatech/fonts/STSong.ttf -O \
-    && cp -f STSong.ttf /usr/share/fonts/ \
-    && rm -rf ./STSong.ttf
+    # 安装字体（华文宋体、黑体、楷体）
+    && mkdir -p /tmp/fonts/ \
+    && curl --retry 3 -LfsSo /tmp/fonts/stsong.ttf http://nexus.avacloud.com.cn/repository/software/avatech/fonts/STSong.ttf -O \
+    && curl --retry 3 -LfsSo /tmp/fonts/simhei.ttf http://nexus.avacloud.com.cn/repository/software/avatech/fonts/simhei.ttf -O \
+    && curl --retry 3 -LfsSo /tmp/fonts/simkai.ttf http://nexus.avacloud.com.cn/repository/software/avatech/fonts/simkai.ttf -O \
+    && cp -f /tmp/fonts/* /usr/share/fonts/ \
+    && rm -rf /tmp/fonts/
