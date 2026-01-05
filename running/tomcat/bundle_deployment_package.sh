@@ -6,11 +6,12 @@ echo '                              2025.07.23                                  
 echo '  note:                                                                     '
 echo '      1. bundle tomcat package, include scripts, tools, configs.            '
 echo '  parameter:                                                                '
-echo '      -v [tomcat version]        tomcat version.                            '
+echo '      -t [tomcat version]        tomcat version.                            '
 echo '      -j [java url]              java download url.                         '
+echo '      -b [btulz version]         btulz version.                             '
 echo '****************************************************************************'
 # 设置参数变量
-while getopts ":t:j" arg; do
+while getopts "t:j:b:" arg; do
     case $arg in
     t)
         TOMCAT_VERSION=$OPTARG
@@ -18,23 +19,30 @@ while getopts ":t:j" arg; do
     j)
         JAVA_URL=$OPTARG
         ;;
+    b)
+        BTULZ_VERSION=$OPTARG
+        ;;
     esac
 done
 # 工作目录
 WORK_FOLDER=$(pwd)
 # 设置默认变量值
 if [ "${TOMCAT_VERSION}" = "" ]; then
-    TOMCAT_VERSION="9.0.111"
+    TOMCAT_VERSION="9.0.115"
 fi
 TOMCAT_URL="https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}-windows-x64.zip"
 
 if [ "${JAVA_URL}" = "" ]; then
-    JAVA_URL="http://maven.colorcoding.org/repository/software/java/ibm-semeru-open-jdk_x64_windows_8u472b08_openj9-0.56.0.zip"
+    JAVA_URL="http://maven.colorcoding.org/repository/software/java/ibm-semeru-open-jdk_x64_windows_8u482b08_openj9-0.57.0.zip"
 fi
+
+if [ "${BTULZ_VERSION}" = "" ]; then
+    BTULZ_VERSION="latest"
+fi
+BTULZ_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.transforms/${BTULZ_VERSION}/btulz.transforms-${BTULZ_VERSION}.tar"
 
 SCRIPTS_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.scripts/latest/btulz.scripts-latest.tar"
 SCRIPTS_TOOLS_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.scripts/win-tools/btulz.scripts-win-tools.tar"
-BTULZ_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.transforms/latest/btulz.transforms-latest.tar"
 
 echo --checking tools
 curl -V | sed -n '1p'

@@ -16,6 +16,3 @@ RUN set -x \
     && cp -r /tmp/crystalreports/crystalreportviewers ${CATALINA_HOME}/webapps/crystalreports/viewers \
     && cp -r /tmp/crystalreports/lib ${CATALINA_HOME}/webapps/crystalreports/jars \
     && rm -rf /tmp/cr4erl.zip /tmp/crystalreports
-
-# 恢复tomat的jsp检查
-COPY container/tomcat/conf/context.xml ${CATALINA_HOME}/conf/context.xml
