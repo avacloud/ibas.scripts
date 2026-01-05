@@ -5,6 +5,7 @@ echo '                           by niuren.zhu                                  
 echo '                              2025.12.30                                    '
 echo '  note:                                                                     '
 echo '      1. synchronize code files and handle tf management status.            '
+echo '      2. the replacement contents is written in file replacements.txt.      '
 echo '  parameter:                                                                '
 echo '        $1             source folder.                                       '
 echo '        $2             target folder.                                       '
@@ -41,6 +42,7 @@ synchronize() {
   if [ "${TARGET_FILE}" == "" ]; then
     TARGET_FILE=${TARGET_FOLDER}/${FILE_PATH}
   fi
+  mkdir -p ${TARGET_FILE%/*}
   if [ -e ${TARGET_FILE} ]; then
     tf checkout ${TARGET_FILE}
     cp -f ${SOURCE_FILE} ${TARGET_FILE}
@@ -48,20 +50,21 @@ synchronize() {
     cp ${SOURCE_FILE} ${TARGET_FILE} && tf add ${TARGET_FILE}
   fi
 # 修正文件内容，非mac替换sed -i "" 为 sed -i
-  sed -i "" 's/.data.Decimal;/.common.Decimals;/g' "${TARGET_FILE}"
-  sed -i "" 's/.mapping.BusinessObjectUnit;/.bo.BusinessObjectUnit;/g' "${TARGET_FILE}"
-  sed -i "" 's/.mapping.DbField;/.db.DbField;/g' "${TARGET_FILE}"
-  sed -i "" 's/.mapping.DbFieldType;/.db.DbFieldType;/g' "${TARGET_FILE}"
-  sed -i "" 's/.mapping.LogicContract;/.logic.LogicContract;/g' "${TARGET_FILE}"
-  sed -i "" 's/.mapping.Value;/.common.Value;/g' "${TARGET_FILE}"
-  sed -i "" 's/.core.RepositoryException;/.repository.RepositoryException;/g' "${TARGET_FILE}"
-  sed -i "" 's/.serialization.Serializable/.core.Serializable/g' "${TARGET_FILE}"
-  sed -i "" 's/Decimal.ZERO/Decimals.VALUE_ZERO/g' "${TARGET_FILE}"
-  sed -i "" 's/Decimal.ONE/Decimals.VALUE_ONE/g' "${TARGET_FILE}"
-  sed -i "" 's/IConfigurationManager/ConfigurationManager/g' "${TARGET_FILE}"
-  sed -i "" 's/ConfigurationFactory.create().createManager()/ConfigurationFactory.createManager()/g' "${TARGET_FILE}"
-  sed -i "" 's/FileRepository.CRITERIA_CONDITION_ALIAS_FILE_NAME/FileRepository.CONDITION_ALIAS_FILE_NAME/g' "${TARGET_FILE}"
-  sed -i "" 's/this.getRepository().setRepositoryFolder(FileService.WORK_FOLDER)/this.setRepositoryFolder(FileService.WORK_FOLDER)/g' "${TARGET_FILE}"
+  if [ -e "${WORK_FOLDER}/replacements.txt" ]; then
+    cat "${WORK_FOLDER}/replacements.txt" | while read -r REPLACEMENT; do
+      if [ "${REPLACEMENT}" = "" ]; then
+        continue;
+      fi
+      if [ "${REPLACEMENT:0:1}" = "#" ]; then
+        continue;
+      fi
+      if [ "$(uname)" = "Darwin" ]; then
+        sed -i "" "${REPLACEMENT}" ${TARGET_FILE}
+      else
+        sed -i "${REPLACEMENT}" ${TARGET_FILE}
+      fi
+    done
+  fi
 }
 
 # 开始时间
@@ -71,31 +74,23 @@ echo --Source Folder: ${SOURCE_FOLDER}
 echo --Target Folder: ${TARGET_FOLDER}
 
 CODE_TYPES="*.java *.properties *.xml *.ts *.json"
-CODE_FILES="~code_files.txt"
+SKIP_FILES="pom.xml app.xml config.json index.ui.c.d.ts index.ui.m.d.ts"
 
 # 清理干扰文件
-rm -f "${WORK_FOLDER}/${CODE_FILES}"
 rm -rf "${SOURCE_FOLDER}/release"
 find "${SOURCE_FOLDER}" -name "target" -type d -exec rm -rf {} \;
 find "${TARGET_FOLDER}" -name "target" -type d -exec rm -rf {} \;
 
 # 查找待处理文件
 for CODE_TYPE in ${CODE_TYPES}; do
-    find "${SOURCE_FOLDER}" -name "${CODE_TYPE}" -path "*/src/main/*" | while read -r CODE_FILE; do
-        FILE_NAME=${CODE_FILE##*/}
-        if [ ${FILE_NAME} == "pom.xml" ]; then
-            continue
-        fi
-        if [ ${FILE_NAME} == "app.xml" ]; then
-            continue
-        fi
-        if [ ${FILE_NAME} == "config.json" ]; then
-            continue
-        fi
-        synchronize ${CODE_FILE}
-    done
+  find "${SOURCE_FOLDER}" -name "${CODE_TYPE}" -path "*/src/main/*" | while read -r CODE_FILE; do
+    FILE_NAME=${CODE_FILE##*/}
+    if echo "${SKIP_FILES}" | grep -q "${FILE_NAME}"; then
+      continue
+    fi
+    synchronize ${CODE_FILE}
+  done
 done
-#
 
 # 计算执行时间
 END_TIME=$(date +'%Y-%m-%d %H:%M:%S')

@@ -1,0 +1,64 @@
+s/.data.Decimal;/.common.Decimals;/g
+s/.mapping.BusinessObjectUnit;/.bo.BusinessObjectUnit;/g
+s/.mapping.DbField;/.db.DbField;/g
+s/.mapping.DbFieldType;/.db.DbFieldType;/g
+s/.mapping.LogicContract;/.logic.LogicContract;/g
+s/.mapping.Value;/.common.Value;/g
+s/.mapping.*;/.db.*;/g
+s/.core.Daemon;/.task.Daemon;/g
+s/.core.IDaemonTask;/.task.IDaemonTask;/g
+s/.core.BOFactory;/.bo.BOFactory;/g
+s/.core.RepositoryException;/.repository.RepositoryException;/g
+s/.core.IBusinessObjectBase;/.bo.IBusinessObject;/g
+s/.serialization.Serializable/.core.Serializable/g
+s/Decimal.ZERO/Decimals.VALUE_ZERO/g
+s/Decimal.ONE/Decimals.VALUE_ONE/g
+s/Decimal.ROUNDING_/Decimals.ROUNDING_/g
+s/Decimal.DECIMAL_/Decimals.DECIMAL_/g
+s/Decimal.add(/Decimals.add(/g
+s/Decimal.subtract(/Decimals.subtract(/g
+s/Decimal.divide(/Decimals.divide(/g
+s/Decimal.multiply(/Decimals.multiply(/g
+s/Decimal.valueOf(/Decimals.valueOf(/g
+s/Decimal.isZero(/Decimals.isZero(/g
+s/Decimal.round(/Decimals.round(/g
+s/BigDecimals.VALUE_/Decimals.VALUE_/g
+s/BigDecimals.valueOf/Decimals.valueOf/g
+s/BigDecimals.ROUND_HALF_UP/Decimals.ROUNDING_MODE_DEFAULT/g
+s/DateTime.MIN_VALUE/DateTimes.VALUE_MIN/g
+s/DateTime.MAX_VALUE/DateTimes.VALUE_MAX/g
+s/DateTime.FORMAT_DATE/DateTimes.FORMAT_DATE/g
+s/DateTime.FORMAT_TIME/DateTimes.FORMAT_TIME/g
+s/DateTime.FORMAT_DATETIME/DateTimes.FORMAT_DATETIME/g
+s/DateTime.getToday/DateTimes.today/g
+s/DateTime.getNow/DateTimes.now/g
+s/DateTime.valueOf/DateTimes.valueOf/g
+s/DataConvert.isNullOrEmpty/Strings.isNullOrEmpty/g
+s/DataConvert.isNumeric/Strings.isNumeric/g
+s/DataConvert.STRING_VALUE_ZERO/Strings.VALUE_ZERO/g
+s/DataConvert.STRING_VALUE_EMPTY/Strings.VALUE_EMPTY/g
+s/IConfigurationManager/ConfigurationManager/g
+s/IBusinessObjectBase/IBusinessObject/g
+s/ISerializer<?>/ISerializer/g
+s/ISerializerManager/SerializerManager/g
+s/SerializerFactory/SerializationFactory/g
+s/BOFactory.create()./BOFactory./g
+s/.create().createManager()/.createManager()/g
+s/ConfigurationFactory.create().createManager()/ConfigurationFactory.createManager()/g
+s/FileRepository.CRITERIA_CONDITION_ALIAS_FILE_NAME/FileRepository.CONDITION_ALIAS_FILE_NAME/g
+s/this.getRepository().setRepositoryFolder(FileService.WORK_FOLDER)/this.setRepositoryFolder(FileService.WORK_FOLDER)/g
+s/upload(caller: ibas.IUploadFileCaller<ibas.FileData>)/upload(caller: ibas.IUploadFileCaller<ibas.FileItem>)/g
+s/.data.FileData;/.data.FileItem;/g
+s/OperationResult<FileData>/OperationResult<FileItem>/g
+s/FileData fileData/FileItem fileData/g
+s/String.format("attachment;filename=%s", fileData.getFileName()))/String.format("attachment;filename=%s", fileData.getName()))/g
+s/os.write(fileData.getFileBytes());/fileData.writeTo(os);/g
+s/.setRepository(this.getRepository())/.setTransaction(this.getTransaction())/g
+s/.setRepository(super.getRepository())/.setTransaction(super.getTransaction())/g
+s/.setRepository(this.getService().getRepository())/.setTransaction(this.getService().getTransaction())/g
+s/this.getService().getRepository()/this.getService().getTransaction()/g
+s/.setCurrentUser(/.setUserToken(/g
+s/IMessageRecorder /MessageRecorder /g
+s/IMessage /Message /g
+s/SqlStoredProcedure/SqlStoredProcedure/g
+s/this.getLogicChain().fetchBeAffected(/this.fetchBeAffectedInLogics(/g

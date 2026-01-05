@@ -21,5 +21,6 @@
 ~~~
 * synchronize_code_files.sh  同步项tfs目集合代码，处理签出及新增。（适用已初始化项目）
 ~~~
+# ./replacements.txt 文件中定义需要替换的文件内容
  ./synchronize_code_files.sh ~/source ~/target
 ~~~
