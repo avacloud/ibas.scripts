@@ -11,11 +11,8 @@ RUN set -x \
 # 安装水晶报表运行库
 RUN set -x \
     && mkdir -p ${CATALINA_HOME}/webapps/crystalreports \
-    && curl --retry 3 -LfsSo /tmp/cr4erl.zip https://nexus.avacloud.com.cn/repository/software/avatech/crystalreport/CR4ERL31_0-80004572.ZIP \
+    && curl --retry 3 -LfsSo /tmp/cr4erl.zip https://nexus.avacloud.com.cn/repository/software/avatech/crystalreport/CR4ERL32_0-80004572.ZIP \
     && unzip -o /tmp/cr4erl.zip -d /tmp/crystalreports \
     && cp -r /tmp/crystalreports/crystalreportviewers ${CATALINA_HOME}/webapps/crystalreports/viewers \
     && cp -r /tmp/crystalreports/lib ${CATALINA_HOME}/webapps/crystalreports/jars \
     && rm -rf /tmp/cr4erl.zip /tmp/crystalreports
-
-# 恢复tomat的jsp检查
-COPY container/tomcat/conf/context.xml ${CATALINA_HOME}/conf/context.xml
