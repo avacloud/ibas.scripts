@@ -1,0 +1,46 @@
+# deploy application on cloud foundry
+---
+applications:
+  - name: avacloud
+    memory: 2G
+    disk-quota: 4G
+    docker:
+      # image not support variables
+      image: docker.avacloud.com.cn/c00002/avacloud/tomcat:202604091404
+    features:
+      ssh: true
+    command: |
+      download() {
+        local FILE="$1"
+        local URL="((DOWNLOAD_URL))/$FILE?token=((DOWNLOAD_TOKEN))"
+        echo "$URL" | grep -q "^http"
+        if [ $? -ne 0 ]; then
+          echo "please check --var DOWNLOAD_URL"
+        fi
+        echo "$URL" | grep -q "token=$"
+        if [ $? -eq 0 ]; then
+          echo "please check --var DOWNLOAD_TOKEN"
+        fi
+        echo "download: $FILE"
+        curl --retry 3 -LfsSo "$FILE" "$URL"
+        if [ $? -ne 0 ]; then
+          echo "download faild: $FILE"
+          exit 1
+        fi
+      }
+      echo "========== download files =========="
+      cd $CATALINA_HOME || exit 1
+      download ibas/conf/app.xml
+      download ibas/conf/config.json
+      download ibas/conf/service_routing.xml
+      echo "==========  start tomcat  =========="
+      catalina.sh run
+
+# create app
+# cf -f cf.manifest.yaml --var DOWNLOAD_URL=https://xxxx.xxxx.xxx/.../c00002/p01  --var DOWNLOAD_TOKEN=xxxxxxxx
+
+# update db objects
+# cf ssh avacloud -c 'cd $CATALINA_HOME && PATH=$JAVA_HOME/bin:$PATH && ./initialize_apps.sh'
+
+# update service_routing
+# cf ssh avacloud -c 'cd $CATALINA_HOME && PATH=$JAVA_HOME/bin:$PATH && ./update_routing.sh'

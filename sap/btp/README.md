@@ -31,4 +31,15 @@ cf run-task compiling "cd /root/codes/ibas.scripts/compiling && ./clone_build_co
 ~~~
 cf push developing -u none -k 4g -m 2g -o avacloud/developing:ibas
 ~~~
-
+* deploy application
+~~~
+cf push -f cf.manifest.yaml --var DOWNLOAD_TOKEN=${配置员口令} --var DOWNLOAD_URL=${配置文件下载地址}
+~~~
+* update db objects
+~~~
+cf ssh avacloud -c 'cd $CATALINA_HOME && PATH=$JAVA_HOME/bin:$PATH && ./initialize_apps.sh'
+~~~
+* update service_routing
+~~~
+cf ssh avacloud -c 'cd $CATALINA_HOME && PATH=$JAVA_HOME/bin:$PATH && ./update_routing.sh'
+~~~
