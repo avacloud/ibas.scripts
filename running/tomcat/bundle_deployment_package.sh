@@ -8,10 +8,10 @@ echo '      1. bundle tomcat package, include scripts, tools, configs.          
 echo '  parameter:                                                                '
 echo '      -t [tomcat version]        tomcat version.                            '
 echo '      -j [java url]              java download url.                         '
-echo '      -b [btulz version]         btulz version.                             '
+echo '      -i [ibas version: v1 v2]   ibas version, default v1.                  '
 echo '****************************************************************************'
 # 设置参数变量
-while getopts "t:j:b:" arg; do
+while getopts "t:j:i:" arg; do
     case $arg in
     t)
         TOMCAT_VERSION=$OPTARG
@@ -19,8 +19,8 @@ while getopts "t:j:b:" arg; do
     j)
         JAVA_URL=$OPTARG
         ;;
-    b)
-        BTULZ_VERSION=$OPTARG
+    i)
+        IBAS_VERSION=$OPTARG
         ;;
     esac
 done
@@ -33,11 +33,16 @@ fi
 TOMCAT_URL="https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}-windows-x64.zip"
 
 if [ "${JAVA_URL}" = "" ]; then
-    JAVA_URL="http://maven.colorcoding.org/repository/software/java/ibm-semeru-open-jdk_x64_windows_8u482b08_openj9-0.57.0.zip"
+    JAVA_URL="https://nexus.avacloud.com.cn/repository/software/avatech/java/ibm-semeru-open-jdk_x64_windows_8.0.492.0.zip"
 fi
 
-if [ "${BTULZ_VERSION}" = "" ]; then
-    BTULZ_VERSION="latest"
+if [ "${IBAS_VERSION}" = "" ]; then
+    IBAS_VERSION="v1"
+fi
+
+BTULZ_VERSION="latest"
+if [ "${IBAS_VERSION}" = "v2" ]; then
+    BTULZ_VERSION="latest-v2"
 fi
 BTULZ_URL="http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.transforms/${BTULZ_VERSION}/btulz.transforms-${BTULZ_VERSION}.tar"
 
@@ -91,8 +96,11 @@ if [ -e "${TOMCAT_DATA_FOLDER}/conf" ]; then
 fi
 if [ -e "${TOMCAT_DATA_FOLDER}/ibas" ]; then
     cp -rf "${TOMCAT_DATA_FOLDER}/ibas" ${TOMCAT_FOLDER}/
+    mv -f "${TOMCAT_FOLDER}/ibas/conf/app.${IBAS_VERSION}.xml" "${TOMCAT_FOLDER}/ibas/conf/app.xml"
+    rm -f ${TOMCAT_FOLDER}/ibas/conf/app.*.xml
 fi
-cp -rf "${TOMCAT_DATA_FOLDER}/packages.txt" ${TOMCAT_FOLDER}/
+
+cp -rf "${TOMCAT_DATA_FOLDER}/packages.${IBAS_VERSION}.txt" "${TOMCAT_FOLDER}/packages.txt"
 cp -rf "${TOMCAT_DATA_FOLDER}/readme.txt" ${TOMCAT_FOLDER}/
 mkdir -p ${TOMCAT_FOLDER}/ibas/data
 mkdir -p ${TOMCAT_FOLDER}/ibas/conf
@@ -104,14 +112,6 @@ rm -rf ${TOMCAT_FOLDER}/webapps && mkdir -p ${TOMCAT_FOLDER}/webapps
 
 # 修改配置文件
 if [ "$(uname)" = "Darwin" ]; then
-# 设置jdk目录
-    sed -i '' '/Make sure prerequisite environment variables are set/a\
-if exist "%CATALINA_BASE%\\jdk" set "JAVA_HOME=%CATALINA_BASE%\\jdk"\
-' "${TOMCAT_FOLDER}/bin/setclasspath.bat"
-
-    sed -i '' '/Make sure prerequisite environment variables are set/a\
-if [ -e "$CATALINA_BASE/jdk" ]; then export JAVA_HOME="$CATALINA_BASE/jdk"; fi\
-' "${TOMCAT_FOLDER}/bin/setclasspath.sh"
 # 设置启动页
     sed -i '' '/<welcome-file-list>/a\
         <welcome-file>login.html</welcome-file>\
@@ -119,12 +119,6 @@ if [ -e "$CATALINA_BASE/jdk" ]; then export JAVA_HOME="$CATALINA_BASE/jdk"; fi\
 # 设置默认资源
     sed -i "" 's/JvmMx=256/JvmMx=4096/g' "${TOMCAT_FOLDER}/bin/service.bat"
 else
-# 设置jdk目录
-    sed -i '/Make sure prerequisite environment variables are set/a\
-if exist "%CATALINA_BASE%\\jdk" set "JAVA_HOME=%CATALINA_BASE%\\jdk"' "${TOMCAT_FOLDER}/bin/setclasspath.bat"
-
-    sed -i '/Make sure prerequisite environment variables are set/a\
-if [ -e "$CATALINA_BASE/jdk" ]; then export JAVA_HOME="$CATALINA_BASE/jdk"; fi' "${TOMCAT_FOLDER}/bin/setclasspath.sh"
 # 设置启动页
     sed -i '/<welcome-file-list>/a\
         <welcome-file>login.html</welcome-file>' "${TOMCAT_FOLDER}/conf/web.xml"

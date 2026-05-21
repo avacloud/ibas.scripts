@@ -15,4 +15,6 @@ RUN set -x \
     && unzip -o /tmp/cr4erl.zip -d /tmp/crystalreports \
     && cp -r /tmp/crystalreports/crystalreportviewers ${CATALINA_HOME}/webapps/crystalreports/viewers \
     && cp -r /tmp/crystalreports/lib ${CATALINA_HOME}/webapps/crystalreports/jars \
-    && rm -rf /tmp/cr4erl.zip /tmp/crystalreports
+    && rm -rf /tmp/cr4erl.zip /tmp/crystalreports \
+    # 修改tomcat配置，以支持jsp文件
+    && sed -i -E 's/[[:space:]]+containerSciFilter="[^"]*"//g' ${CATALINA_HOME}/conf/context.xml

@@ -26,5 +26,8 @@ docker build -f ./dockerfile-nginx -t avacloud/tomginx:ibas-alpine ./
 ~~~
 * bundle_deployment_package.sh (独立打包脚本)
 ~~~
-./bundle_deployment_package.sh
+# v1 版本打包
+./bundle_deployment_package.sh -i v1
+# v2 版本打包
+./bundle_deployment_package.sh -i v2
 ~~~
