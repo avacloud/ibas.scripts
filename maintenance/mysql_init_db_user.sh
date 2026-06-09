@@ -122,7 +122,7 @@ fi
 echo ---DB Server: ${MYSQL_HOST}
 echo ---DB Name: ${DB_NAME}
 echo ---DB User: ${DB_USER}
-echo ---DB Password: ${DB_PASSWORD}
+echo ---DB Password: ********
 
 # 创建数据库及用户
 echo ----create db and user.

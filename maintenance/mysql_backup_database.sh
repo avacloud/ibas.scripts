@@ -86,7 +86,7 @@ fi
 
 # 创建备份目录
 if [ ! -e "${BACKUP_DIR}" ]; then
-    mkdir -p ${BACKUP_DIR}
+    mkdir -p "${BACKUP_DIR}"
 fi
 
 # 未指定数据库，则获取全部库
@@ -121,7 +121,7 @@ done
 if [ "${CLEAR_EXPIRED_BACKUP}" = "ON" ]; then
     if [ -e "${BACKUP_FOLDER}" ];then
         echo "clear expired backup database."
-        find "${BACKUP_FOLDER}" -name "*.sql.gz" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
+        find "${BACKUP_FOLDER}" -name "*.sql.gz" -mtime +"${EXPIRE_DAYS}" -exec rm -f {} \;
         find "${BACKUP_FOLDER}" -type d -empty -delete;
     fi
 fi

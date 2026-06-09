@@ -42,12 +42,12 @@ synchronize() {
   if [ "${TARGET_FILE}" == "" ]; then
     TARGET_FILE=${TARGET_FOLDER}/${FILE_PATH}
   fi
-  mkdir -p ${TARGET_FILE%/*}
-  if [ -e ${TARGET_FILE} ]; then
-    tf checkout ${TARGET_FILE}
-    cp -f ${SOURCE_FILE} ${TARGET_FILE}
+  mkdir -p "${TARGET_FILE%/*}"
+  if [ -e "${TARGET_FILE}" ]; then
+    tf checkout "${TARGET_FILE}"
+    cp -f "${SOURCE_FILE}" "${TARGET_FILE}"
   else
-    cp ${SOURCE_FILE} ${TARGET_FILE} && tf add ${TARGET_FILE}
+    cp "${SOURCE_FILE}" "${TARGET_FILE}" && tf add "${TARGET_FILE}"
   fi
 # 修正文件内容，非mac替换sed -i "" 为 sed -i
   if [ -e "${WORK_FOLDER}/replacements.txt" ]; then
@@ -59,9 +59,9 @@ synchronize() {
         continue;
       fi
       if [ "$(uname)" = "Darwin" ]; then
-        sed -i "" "${REPLACEMENT}" ${TARGET_FILE}
+        sed -i "" "${REPLACEMENT}" "${TARGET_FILE}"
       else
-        sed -i "${REPLACEMENT}" ${TARGET_FILE}
+        sed -i "${REPLACEMENT}" "${TARGET_FILE}"
       fi
     done
   fi

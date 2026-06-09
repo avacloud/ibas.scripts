@@ -4,10 +4,10 @@ echo '                   k8s_cleanup_running_logs.sh                            
 echo '                           by niuren.zhu                                    '
 echo '                              2024.06.26                                    '
 echo '  note:                                                                     '
-echo '      1. clean up runing logs.                                              '
+echo '      1. clean up running logs.                                             '
 echo '  parameter:                                                                '
 echo '      -f [clean folder]             cleaning folder.                        '
-echo '      -e [clean expire day]         file expire day, defalut 14 days.       '
+echo '      -e [clean expire day]         file expire day, default 14 days.       '
 echo '****************************************************************************'
 # 设置参数变量
 while getopts "f:e:" arg; do
@@ -40,20 +40,20 @@ echo --Days Ago: ${EXPIRE_DAYS}
 echo --working, clean logs please waiting.
 
 # 清理日志文件
-find ${CLEAN_FOLDER} -type f -name "ibas_*.log" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
+find "${CLEAN_FOLDER}" -type f -name "ibas_*.log" -mtime +"${EXPIRE_DAYS}" -exec rm -f {} \;
 
 # 清理水晶报表运行文件
-find ${CLEAN_FOLDER} -type d -name "crystalreports_files" | while read -r FOLDER_ITEM; do
-    echo --working, clean crystal reports runging logs please waiting.
-    find ${FOLDER_ITEM} -type f -name "Params.properties" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
-    find ${FOLDER_ITEM} -type f -name "ReportFile.rpt" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
-    find ${FOLDER_ITEM} -type d -empty -delete;
+find "${CLEAN_FOLDER}" -type d -name "crystalreports_files" | while read -r FOLDER_ITEM; do
+    echo --working, clean crystal reports running logs please waiting.
+    find "${FOLDER_ITEM}" -type f -name "Params.properties" -mtime +"${EXPIRE_DAYS}" -exec rm -f {} \;
+    find "${FOLDER_ITEM}" -type f -name "ReportFile.rpt" -mtime +"${EXPIRE_DAYS}" -exec rm -f {} \;
+    find "${FOLDER_ITEM}" -type d -empty -delete;
 done
 
 # 清理集成任务运行日志
-find ${CLEAN_FOLDER} -type d -name "integration_files" | while read -r FOLDER_ITEM; do
-    echo --working, clean integration runging logs please waiting.
-    find ${FOLDER_ITEM} -type f -name "*.txt" -mtime +${EXPIRE_DAYS} -exec rm -f {} \;
+find "${CLEAN_FOLDER}" -type d -name "integration_files" | while read -r FOLDER_ITEM; do
+    echo --working, clean integration running logs please waiting.
+    find "${FOLDER_ITEM}" -type f -name "*.txt" -mtime +"${EXPIRE_DAYS}" -exec rm -f {} \;
 done
 
 # 计算执行时间

@@ -35,7 +35,7 @@ if [ "${DATA_FOLDER}" = "" ]; then
     DATA_FOLDER=${WORK_FOLDER}
 fi
 if [ "${CUSTOMERS}" = "" ]; then
-    CUSTOMERS=$(find ${DATA_FOLDER} -mindepth 1 -maxdepth 1 -type d -printf '%f ')
+    CUSTOMERS=$(find "${DATA_FOLDER}" -mindepth 1 -maxdepth 1 -type d -printf '%f ')
 fi
 
 # 开始时间
@@ -45,20 +45,16 @@ echo --Start Time: ${START_TIME}
 BACKUP_TIME=$(date +%Y%m%d%H%M)
 
 # 执行备份
-cd ${DATA_FOLDER}
+cd "${DATA_FOLDER}"
 for CUSTOMER_NAME in ${CUSTOMERS}; do
     if [ -e "${DATA_FOLDER}/${CUSTOMER_NAME}" ]; then
         echo "****** backing up: ${CUSTOMER_NAME} ******"
-        if [ -e "${DATA_FOLDER}/${CUSTOMER_NAME}" ]; then
-            mkdir -p ${BACKUP_FOLDER}/${CUSTOMER_NAME}
-        fi
-
+        mkdir -p "${BACKUP_FOLDER}/${CUSTOMER_NAME}"
         BACKUP_FILE="${BACKUP_FOLDER}/${CUSTOMER_NAME}/${CUSTOMER_NAME}_${BACKUP_TIME}.tar.gz"
-
-        tar -czv -f ${BACKUP_FILE} ${CUSTOMER_NAME}
+        tar -czv -f "${BACKUP_FILE}" "${CUSTOMER_NAME}"
     fi
 done
-cd ${WORK_FOLDER}
+cd "${WORK_FOLDER}"
 
 
 # 计算执行时间

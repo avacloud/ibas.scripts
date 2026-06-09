@@ -1,6 +1,6 @@
 #!/bin/bash
 echo '****************************************************************************'
-echo '                   unzip_openui5_packages.sh                               '
+echo '                   openui5_unzip_packages.sh                                '
 echo '                           by niuren.zhu                                    '
 echo '                              2025.07.03                                    '
 echo '  note:                                                                     '
@@ -26,13 +26,16 @@ fi
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 echo --Start Time: ${START_TIME}
 
+# 切换到工作目录
+cd "${WORK_FOLDER}"
+
 # 开始执行命令
 ls openui5-runtime-*.zip | while read -r FILE_NAME; do
     FOLDER_NAME="${FILE_NAME##*-}"
     FOLDER_NAME="${FOLDER_NAME%*.zip}"
     echo --packages: ${FILE_NAME}, folder: ${FOLDER_NAME}
-    if [ ! -e ${WORK_FOLDER}/${FOLDER_NAME} ]; then
-        unzip -q ${FILE_NAME} -d ${FOLDER_NAME}
+    if [ ! -e "${WORK_FOLDER}/${FOLDER_NAME}" ]; then
+        unzip -q "${FILE_NAME}" -d "${FOLDER_NAME}"
     fi
 done
 

@@ -5,27 +5,33 @@ echo '                           by niuren.zhu                                  
 echo '                              2025.07.01                                    '
 echo '  note:                                                                     '
 echo '      1. backup running images to repository.                               '
+echo '      2. if repository not set, only pull images to local.                  '
 echo '  parameter:                                                                '
-echo '        $1             backup repository.                                   '
-echo '        $2             k8s namespace.                                      '
-echo '        $3             image filters.                                      '
+echo '      -r [repository]        backup repository, optional.                   '
+echo '      -n [namespace]         k8s namespace, default customer.               '
+echo '      -f [filters]           image filters, default /avacloud/.             '
 echo '****************************************************************************'
 # 设置参数变量
+while getopts "r:n:f:" arg; do
+    case $arg in
+    r)
+        BACKUP_REPOSITORY=$OPTARG
+        ;;
+    n)
+        K8S_NAMESPACE=$OPTARG
+        ;;
+    f)
+        IMAGE_FILTERS=$OPTARG
+        ;;
+    esac
+done
 # 工作目录
 WORK_FOLDER=$(pwd)
-# 备份仓库地址
-BACKUP_REPOSITORY=$1
-if [ "${BACKUP_REPOSITORY}" = "" ]; then
-    echo "please set backup repository."
-fi
 # 查询的命名空间
-K8S_NAMESPACE=$2
 if [ "${K8S_NAMESPACE}" = "" ]; then
     K8S_NAMESPACE=customer
 fi
-
 # 镜像过滤条件
-IMAGE_FILTERS=$3
 if [ "${IMAGE_FILTERS}" = "" ]; then
     IMAGE_FILTERS=/avacloud/
 fi
@@ -34,21 +40,29 @@ fi
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 echo --Start Time: ${START_TIME}
 
+if [ "${BACKUP_REPOSITORY}" = "" ]; then
+    echo --Mode: Pull images to local only
+else
+    echo --Mode: Pull, tag and push to repository: "${BACKUP_REPOSITORY}"
+fi
+
 # 开始执行命令
-kubectl get pods -n ${K8S_NAMESPACE} --field-selector=status.phase=Running \
+kubectl get pods -n "${K8S_NAMESPACE}" --field-selector=status.phase=Running \
     -o jsonpath="{.items[*].spec.containers[*].image}" |
-    tr -s ' ' '\n' | sort -u | grep ${IMAGE_FILTERS} | while read -r IMAGE; do
+    tr -s ' ' '\n' | sort -u | grep "${IMAGE_FILTERS}" | while read -r IMAGE; do
     IMAGE_REPO="${IMAGE%%/*}"
     IMAGE_NAME="${IMAGE#*/}"
-    IMAGE_BACKUP=${BACKUP_REPOSITORY}/${IMAGE_NAME}
 
     if [ "${BACKUP_REPOSITORY}" = "" ]; then
-        echo --image: ${IMAGE}
+        echo --[PULL] "${IMAGE}"
+        buildah pull "${IMAGE}"
     else
-        echo --repository: ${IMAGE_REPO}, name: ${IMAGE_NAME}
-        docker pull ${IMAGE} && docker tag ${IMAGE} ${IMAGE_BACKUP}
-        echo --backup: ${IMAGE_BACKUP}
-        docker push ${IMAGE_BACKUP}
+        IMAGE_BACKUP="${BACKUP_REPOSITORY}/${IMAGE_NAME}"
+        echo --[BACKUP] repository: "${IMAGE_REPO}", name: "${IMAGE_NAME}"
+        buildah pull "${IMAGE}" && buildah tag "${IMAGE}" "${IMAGE_BACKUP}"
+        echo ----tagged: "${IMAGE_BACKUP}"
+        buildah push "${IMAGE_BACKUP}"
+        echo ----pushed: "${IMAGE_BACKUP}"
     fi
 done
 # 计算执行时间
