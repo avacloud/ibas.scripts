@@ -104,6 +104,68 @@
   -c -e 30
 ~~~
 
+### mssql_restore_database.sh - 还原sql server数据库
+将SQL Server备份文件（.bak）还原到指定数据库，支持本地sqlcmd或docker/podman容器，可还原到不同的数据库名
+~~~
+# 本地模式还原
+./mssql_restore_database.sh \
+  -u sa -p 1q2w3e \
+  -h mssql.example.com -P 1433 \
+  -d target_db \
+  -f /backup/db.bak
+
+# 通过容器还原
+./mssql_restore_database.sh \
+  -u sa -p 1q2w3e \
+  -d target_db \
+  -f /backup/db.bak \
+  -c mssql_container
+~~~
+
+参数说明：
+- `-u` SQL Server用户名，默认sa
+- `-p` SQL Server密码
+- `-h` SQL Server主机地址（容器模式可省略）
+- `-P` SQL Server端口，默认1433
+- `-d` 目标数据库名称
+- `-f` 备份文件（.bak）
+- `-c` docker/podman容器名称，可选
+
+### mysql_restore_database.sh - 还原mysql数据库
+将MySQL备份文件还原到指定数据库，支持本地mysql或docker容器，自动表名大写转换，自动移除DEFINER子句
+~~~
+# 本地模式还原
+./mysql_restore_database.sh \
+  -u root -p 1q2w3e \
+  -h mysql.example.com \
+  -d target_db \
+  -f /backup/db.sql
+
+# 通过容器还原（支持.sql.gz压缩文件）
+./mysql_restore_database.sh \
+  -u root -p 1q2w3e \
+  -d target_db \
+  -f /backup/db.sql.gz \
+  -c mysql_container
+
+# 跳过表名大写转换
+./mysql_restore_database.sh \
+  -u root -p 1q2w3e \
+  -h mysql.example.com \
+  -d target_db \
+  -f /backup/db.sql \
+  -S
+~~~
+
+参数说明：
+- `-u` MySQL用户名
+- `-p` MySQL密码
+- `-h` MySQL主机地址（容器模式可省略）
+- `-d` 数据库名称
+- `-f` SQL文件，支持.sql和.sql.gz
+- `-c` docker容器名称，可选
+- `-S` 跳过表名大写转换
+
 ### mysql_init_db_user.sh - 初始化mysql数据库、用户、权限
 从配置文件中读取数据库信息并创建数据库和用户
 ~~~
