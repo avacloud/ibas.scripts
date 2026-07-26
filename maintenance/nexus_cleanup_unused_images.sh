@@ -18,7 +18,7 @@ echo '      -e [expire days]       image expire days, default 30 days.          
 echo '      -d                     delete mode, actually remove expired images.   '
 echo '****************************************************************************'
 # 设置参数变量
-DRY_RUN=1
+DRY_RUN="ON"
 while getopts "u:p:h:r:n:f:e:d" arg; do
     case $arg in
     u)
@@ -43,7 +43,7 @@ while getopts "u:p:h:r:n:f:e:d" arg; do
         EXPIRE_DAYS=$OPTARG
         ;;
     d)
-        DRY_RUN=0
+        DRY_RUN="OFF"
         ;;
     esac
 done
@@ -82,7 +82,7 @@ fi
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 echo --Start Time: ${START_TIME}
 echo --Expire Days: ${EXPIRE_DAYS}
-if [ "${DRY_RUN}" = "1" ]; then
+if [ "${DRY_RUN}" = "ON" ]; then
     echo --Mode: DRY-RUN \(list only, no deletion\)
 else
     echo --Mode: DELETE \(will remove expired images\)
@@ -246,7 +246,7 @@ while read -r NEXUS_IMAGE_LINE; do
             echo --[SKIP] "${NEXUS_IMAGE}" is not in use but not expired. \(Created: ${LAST_MODIFIED}\)
             ((SKIPPED_COUNT++))
         else
-            if [ "${DRY_RUN}" = "1" ]; then
+            if [ "${DRY_RUN}" = "ON" ]; then
                 echo --[EXPIRED] "${NEXUS_IMAGE}" is not in use and expired. \(Created: ${LAST_MODIFIED}\)
                 ((CLEANED_COUNT++))
             else
@@ -289,7 +289,7 @@ TOTAL_COUNT=$(echo "${NEXUS_IMAGES}" | grep -c . 2>/dev/null || echo 0)
 echo ----"Total images in Nexus: ${TOTAL_COUNT}"
 echo ----"Images kept (running in k8s): ${KEPT_COUNT}"
 echo ----"Images skipped (not expired): ${SKIPPED_COUNT}"
-if [ "${DRY_RUN}" = "1" ]; then
+if [ "${DRY_RUN}" = "ON" ]; then
     echo ----"Images expired (would be deleted): ${CLEANED_COUNT}"
 else
     echo ----"Images cleaned (deleted): ${CLEANED_COUNT}"

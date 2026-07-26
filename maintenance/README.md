@@ -88,9 +88,9 @@
 ~~~
 
 ### mysql_backup_database.sh - 备份mysql数据库
-备份MySQL数据库并压缩存储
+备份MySQL数据库并压缩存储，支持本地mysql或docker容器
 ~~~
-# 备份指定数据库
+# 备份指定数据库（本地模式）
 ./mysql_backup_database.sh \
   -u root -p 1q2w3e \
   -h rm-2ze1sc6qr877owde8.mysql.rds.aliyuncs.com \
@@ -101,11 +101,27 @@
   -u root -p 1q2w3e \
   -h mysql.example.com \
   -f /backup/mysql \
-  -c -e 30
+  -x -e 30
+
+# 通过容器备份（无需指定host）
+./mysql_backup_database.sh \
+  -u root -p 1q2w3e \
+  -c mysql_container \
+  -f /backup/mysql
 ~~~
 
+参数说明：
+- `-u` MySQL用户名
+- `-p` MySQL密码
+- `-h` MySQL主机地址（容器模式可省略）
+- `-f` 备份目录，默认当前目录
+- `-d` 数据库名称，空格分隔多个，不传则备份全部
+- `-c` docker容器名称，可选
+- `-e` 备份过期天数，默认14天
+- `-x` 清理过期备份
+
 ### mssql_restore_database.sh - 还原sql server数据库
-将SQL Server备份文件（.bak）还原到指定数据库，支持本地sqlcmd或docker/podman容器，可还原到不同的数据库名
+将SQL Server备份文件（.bak）还原到指定数据库，还原后自动改为简单恢复模式并收缩空间，支持本地sqlcmd或docker/podman容器，可还原到不同的数据库名
 ~~~
 # 本地模式还原
 ./mssql_restore_database.sh \
@@ -173,9 +189,22 @@
 ./mysql_init_db_user.sh -u root -p 1q2w3e -c ./app.xml
 ~~~
 
-### synchronize_code_files.sh - 同步TFS项目代码
-同步TFS项目代码，处理签出及新增（适用已初始化项目）
+### synchronize_code_files.sh - 同步TFS项目代码（v1->v2全流程）
+同步TFS项目代码，自动处理差异分析、删除/重命名、签出/新增、替换规则、验证修复
 ~~~
-# 同步代码，./replacements.txt 文件中定义需要替换的文件内容
-./synchronize_code_files.sh ~/source ~/target
+./synchronize_code_files.sh ~/Codes/AVA/Cloud/ibas.xxx ~/Codes/AVA/Cloud-v2/ibas.xxx
 ~~~
+
+参数说明：
+- `$1` 源项目路径（v1）
+- `$2` 目标项目路径（v2）
+
+功能特性：
+- 自动分析文件差异（新增/删除/修改/相同）
+- 自动处理删除文件（`tf delete`）
+- 自动处理大小写重命名（两步重命名法解决 TFS 大小写不敏感问题）
+- 批量签出/新增（`tf checkout`/`tf add`，每批50个文件）
+- 应用替换规则（`replacements.txt`，`sed -f` 批量替换）
+- 自动验证所有文件（应用替换规则后比对），失败自动重试修复
+- 输出汇总报告（Total/Copied/Checkout/Add/Delete/Rename/Verify）
+- 记录日志文件（`sync_log_*.txt`，被 .tfignore 自动忽略）

@@ -235,6 +235,20 @@ fi
 echo --setting database to multi_user mode: ${DB_NAME}
 run_sqlcmd -Q "ALTER DATABASE [${DB_NAME}] SET MULTI_USER;" 2>/dev/null
 
+# 设置为简单恢复模式并收缩数据库空间
+echo --setting recovery model to simple: ${DB_NAME}
+run_sqlcmd -Q "ALTER DATABASE [${DB_NAME}] SET RECOVERY SIMPLE;" 2>/dev/null
+
+echo --shrinking database: ${DB_NAME}
+run_sqlcmd -Q "DBCC SHRINKDATABASE ([${DB_NAME}]);" 2>/dev/null
+
+# 修复孤立用户（Orphaned Users）
+# 还原到不同服务器时，数据库用户的SID与服务器登录账户不匹配，导致无法登录
+# 通过sp_change_users_login自动修复已有登录账户的映射关系
+echo --fixing orphaned users: ${DB_NAME}
+run_sqlcmd -d "${DB_NAME}" -Q "SET NOCOUNT ON; DECLARE @sql NVARCHAR(MAX); SELECT @sql = @sql + 'ALTER USER [' + name + '] WITH LOGIN = [' + name + ']; ' FROM sys.database_principals WHERE type = 'S' AND name NOT IN ('dbo','guest','INFORMATION_SCHEMA','sys') AND name NOT LIKE '##%##'; EXEC sp_executesql @sql;" 2>/dev/null
+echo --orphaned users fixed.
+
 # 清理容器内临时备份文件
 if [ "${CONTAINER_NAME}" != "" ]; then
     echo --cleanup temp backup file in container.

@@ -18,26 +18,26 @@ echo '      -u [user]      tfs user.                                            
 echo '      -p [password]  tfs password.                                         '
 echo '      -d [version]   deploy packages to repository,                         '
 echo '                         version default value is today.                    '
-echo '      -s             code files is stored in /dev/shm .                     '
+echo '      -s             code files is stored in /tmp.                          '
 echo '****************************************************************************'
 # 设置参数变量
-while getopts ":qrd:u:p:" arg; do
+while getopts ":qri:m:w:sd:u:p:" arg; do
     case $arg in
     q)
-        QUIET_MODE=y
+        QUIET_MODE="ON"
         ;;
     r)
-        REPLACE=y
+        REPLACE="ON"
         ;;
     d)
-        DEPLOY=y
+        DEPLOY="ON"
         VERSION=$OPTARG
         ;;
     u)
         TFS_USER=$OPTARG
         ;;
     p)
-        TFS_PWD=$OPTARG
+        TFS_PASSWORD=$OPTARG
         ;;
     i)
         MAVEN_ID=$OPTARG
@@ -46,10 +46,10 @@ while getopts ":qrd:u:p:" arg; do
         MAVEN_USER=$OPTARG
         ;;
     w)
-        MAVEN_PWD=$OPTARG
+        MAVEN_PASSWORD=$OPTARG
         ;;
     s)
-        STORED_TMP=y
+        STORED_TMP="ON"
         ;;
     esac
 done
@@ -84,13 +84,16 @@ if [ "$?" != "0" ]; then
 fi
 
 # 配置交互，非安静模式时
-if [ "${QUIET_MODE}" != "y" ]; then
+if [ "${QUIET_MODE}" != "ON" ]; then
     # 设置配置
     echo "--please confirm settings, Entry to skip."
     if [ "${REPLACE}" = "" ]; then
-        read -p "---replace maven setting? (yes or [n]o):" REPLACE
+        read -p "---replace maven setting? (y/n):" REPLACE
+        if [ "${REPLACE}" = "y" ]; then
+            REPLACE="ON"
+        fi
     fi
-    if [ "${REPLACE}" = "y" ]; then
+    if [ "${REPLACE}" = "ON" ]; then
         if [ "${MAVEN_ID}" = "" ]; then
             read -p "----maven server id ([ibas-maven]):" MAVEN_ID
             if [ "${MAVEN_ID}" = "" ]; then
@@ -103,28 +106,32 @@ if [ "${QUIET_MODE}" != "y" ]; then
                 MAVEN_USER=admin
             fi
         fi
-        if [ "${MAVEN_PWD}" = "" ]; then
-            read -p "----maven server user password:" MAVEN_PWD
+        if [ "${MAVEN_PASSWORD}" = "" ]; then
+            read -p "----maven server user password:" MAVEN_PASSWORD
         fi
     fi
     if [ "${TFS_USER}" = "" ]; then
         read -p "---tfs user ("\\" must be "\\\\"):" TFS_USER
     fi
     if [ "${TFS_USER}" != "" ]; then
-        if [ "${TFS_PWD}" = "" ]; then
-            read -p "---tfs password:" TFS_PWD
+        if [ "${TFS_PASSWORD}" = "" ]; then
+            read -p "---tfs password:" TFS_PASSWORD
         fi
     fi
     if [ "${DEPLOY}" = "" ]; then
-        read -p "---deploy war packages to repository? (yes or [n]o):" DEPLOY
+        read -p "---deploy war packages to repository? (y/n):" DEPLOY
         if [ "${DEPLOY}" = "y" ]; then
+            DEPLOY="ON"
             if [ "${VERSION}" = "" ]; then
                 read -p "----packages version ($(date +%Y%m%d%H%M)):" VERSION
             fi
         fi
     fi
     if [ "${STORED_TMP}" = "" ]; then
-        read -p "---compiles files is stored in /tmp? (yes or [n]o):" STORED_TMP
+        read -p "---compiles files is stored in /tmp? (y/n):" STORED_TMP
+        if [ "${STORED_TMP}" = "y" ]; then
+            STORED_TMP="ON"
+        fi
     fi
 fi
 
@@ -133,15 +140,15 @@ echo Quiet: ${QUIET_MODE}
 echo Replace: ${REPLACE}
 echo Maven Id: ${MAVEN_ID}
 echo Maven User: ${MAVEN_USER}
-echo Maven Password: ${MAVEN_PWD}
+echo Maven Password: ${MAVEN_PASSWORD}
 echo Deploy: ${DEPLOY} and Version ${VERSION}
 echo TFS User: ${TFS_USER}
-echo TFS Password: ${TFS_PWD}
+echo TFS Password: ${TFS_PASSWORD}
 exit 1
 !
 
 # 配置文件替换
-if [ "${REPLACE}" = "y" ]; then
+if [ "${REPLACE}" = "ON" ]; then
     if [ -e ~/.m2/conf/settings.xml ]; then
         cp -f ~/.m2/conf/settings.xml ~/.m2/conf/settings.bak.xml
         rm -rf ~/.m2/conf/settings.xml
@@ -154,7 +161,7 @@ if [ "${REPLACE}" = "y" ]; then
     <server>
       <id>${MAVEN_ID}</id>
       <username>${MAVEN_USER}</username>
-      <password>${MAVEN_PWD}</password>
+      <password>${MAVEN_PASSWORD}</password>
     </server>
   </servers>
   <mirrors>
@@ -172,12 +179,12 @@ fi
 # TFS配置
 if [ "${TFS_USER}" != "" ]; then
     git config --global git-tf.server.username "${TFS_USER}"
-    if [ "${TFS_PWD}" != "" ]; then
-        git config --global git-tf.server.password "${TFS_PWD}"
+    if [ "${TFS_PASSWORD}" != "" ]; then
+        git config --global git-tf.server.password "${TFS_PASSWORD}"
     fi
 fi
 # 检查部署war包时的版本号
-if [ "${DEPLOY}" = "y" ]; then
+if [ "${DEPLOY}" = "ON" ]; then
     if [ "${VERSION}" = "" ]; then
         VERSION=$(date +%Y%m%d%H%M)
     fi
@@ -199,7 +206,7 @@ if [ "${MAVEN_URL}" = "" ]; then
 fi
 
 # 使用虚拟磁盘
-if [ "${STORED_TMP}" = "y" ]; then
+if [ "${STORED_TMP}" = "ON" ]; then
     TMP_HOME=/tmp/codes
 
     mkdir -p ${TMP_HOME}/git
@@ -264,7 +271,7 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
             git clone --depth 1 ${GIT_URL}/${collection}/${folder}.git ${others}
         fi
         # 使用虚拟磁盘
-        if [ "${STORED_TMP}" = "y" ]; then
+        if [ "${STORED_TMP}" = "ON" ]; then
             if [ -e "${CODE_FOLDER}/${folder}/compile_order.txt" ]; then
                 while read item; do
                     rm -rf ${CODE_FOLDER}/${folder}/${item}/target
@@ -279,7 +286,7 @@ for COMPILE_ORDER in $(ls git*.compile_order.txt | awk '//{print $NF}'); do
     # 清理编译临时文件
     find . -name "target" -type d | xargs rm -rf >/dev/null
     # 存在脚本则上传war包
-    if [ "${DEPLOY}" = "y" ]; then
+    if [ "${DEPLOY}" = "ON" ]; then
         echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
         ./deploy_wars.sh ${VERSION} ${MAVEN_URL}
     fi
@@ -334,7 +341,7 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
             git tf clone ${TFS_URL}/${collection} /${folder} ${CODE_FOLDER}/${folder}
         fi
         # 使用虚拟磁盘
-        if [ "${STORED_TMP}" = "y" ]; then
+        if [ "${STORED_TMP}" = "ON" ]; then
             if [ -e "${CODE_FOLDER}/${folder}" ]; then
                 cd ${CODE_FOLDER}/${folder}
                 for item in $(ls -l | grep ^d); do
@@ -350,14 +357,14 @@ for COMPILE_ORDER in $(ls tfs*.compile_order.txt | awk '//{print $NF}'); do
     # 清理编译临时文件
     find . -name "target" -type d | xargs rm -rf >/dev/null
     # 存在脚本则上传war包
-    if [ "${DEPLOY}" = "y" ]; then
+    if [ "${DEPLOY}" = "ON" ]; then
         echo --deploy wars to [${MAVEN_URL}], and version [${VERSION}]
         ./deploy_wars.sh ${VERSION} ${MAVEN_URL}
     fi
 done
 cd ${WORK_FOLDER}
 
-if [ "${DEPLOY}" = "y" ]; then
+if [ "${DEPLOY}" = "ON" ]; then
     echo --Deploy Version: [${VERSION}]
 fi
 # 计算执行时间
