@@ -28,7 +28,7 @@ done
 WORK_FOLDER=$(pwd)
 # 设置默认变量值
 if [ "${TOMCAT_VERSION}" = "" ]; then
-    TOMCAT_VERSION="9.0.117"
+    TOMCAT_VERSION="9.0.120"
 fi
 TOMCAT_URL="https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}-windows-x64.zip"
 

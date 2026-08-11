@@ -1,0 +1,38 @@
+# deploy application on cloud foundry
+---
+applications:
+  - name: agt-retriever
+    memory: 512m
+    disk-quota: 4G
+    docker:
+      # image not support variables
+      image: docker.avacloud.com.cn/avacloud/agt-data-retriever:202608111635
+    features:
+      ssh: true
+    command: |
+      download() {
+        local FILE="$1"
+        local URL="((DOWNLOAD_URL))/$FILE?token=((DOWNLOAD_TOKEN))"
+        echo "$URL" | grep -q "^http"
+        if [ $? -ne 0 ]; then
+          echo "please check --var DOWNLOAD_URL"
+        fi
+        echo "$URL" | grep -q "token=$"
+        if [ $? -eq 0 ]; then
+          echo "please check --var DOWNLOAD_TOKEN"
+        fi
+        echo "download: $FILE"
+        curl --retry 3 -LfsSo "/app/config.yaml" "$URL"
+        if [ $? -ne 0 ]; then
+          echo "download faild: $FILE"
+          exit 1
+        fi
+      }
+      echo "========== download files =========="
+      cd $APP_HOME || exit 1
+      download agent/conf/agt-data-retriever.yaml
+      echo "==========  start webapi  =========="
+      python main.py
+
+# create app
+# cf -f cf.retriever.yaml --var DOWNLOAD_URL=https://xxxx.xxxx.xxx/operations/services/rest/customer/c00002/p01 --var DOWNLOAD_TOKEN=xxxxxxxx

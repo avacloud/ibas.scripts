@@ -33,7 +33,14 @@ cf push developing -u none -k 4g -m 2g -o avacloud/developing:ibas
 ~~~
 * deploy application
 ~~~
-cf push -f cf.manifest.yaml --var DOWNLOAD_TOKEN=${配置员口令} --var DOWNLOAD_URL=${配置文件下载地址}
+cf push -f cf.manifest.yaml --var DOWNLOAD_TOKEN=xxxxxx --var DOWNLOAD_URL=https://xxxx.xxxx.xxx/operations/services/rest/customer/c00002/p01
+~~~
+* batch deploy application
+~~~
+cd sap/btp/deploy
+./batch_deploy.sh -u https://xxxx.xxxx.xxx/operations/services/rest/customer/c00002/p01 -t xxxxxx                  # 部署当前目录全部 cf.*.yaml
+./batch_deploy.sh -u https://xxxx.xxxx.xxx/operations/services/rest/customer/c00002/p01 -t xxxxxx -f agt          # 仅部署名称含 agt 的清单
+./batch_deploy.sh -u https://xxxx.xxxx.xxx/operations/services/rest/customer/c00002/p01 -t xxxxxx -c              # 出错继续部署下一个
 ~~~
 * update db objects
 ~~~
