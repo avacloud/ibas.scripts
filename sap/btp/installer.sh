@@ -149,4 +149,27 @@ fi
 source ${HOME}/.profile.d/codes.sh
 echo "Code Home: ${CODE_HOME}"
 echo ---
+# bash history persistence
+if [ ! -e ${HOME}/.profile.d/history.sh ]; then
+    cat >${HOME}/.profile.d/history.sh <<EOF
+# bash command history persistence
+# history file
+export HISTFILE=\${HOME}/.bash_history
+# number of commands to remember in history list
+export HISTSIZE=10000
+# maximum number of lines in history file
+export HISTFILESIZE=20000
+# ignore duplicates and commands starting with space
+export HISTCONTROL=ignoreboth:erasedups
+# append to history file, don't overwrite it
+shopt -s histappend
+# save history after each command
+PROMPT_COMMAND="history -a; history -c; history -r; \${PROMPT_COMMAND}"
+# record timestamp for each history entry
+export HISTTIMEFORMAT="%F %T  "
+EOF
+fi
+source ${HOME}/.profile.d/history.sh
+echo "Bash history persistence: HISTFILE=${HISTFILE}, HISTSIZE=${HISTSIZE}, HISTFILESIZE=${HISTFILESIZE}"
+echo ---
 # exit
