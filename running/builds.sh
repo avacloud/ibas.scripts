@@ -31,6 +31,7 @@ TOMCAT_FOLDER=${WORK_FOLDER}/tomcat
 if [ -e ${TOMCAT_FOLDER} ]; then
   cd ${TOMCAT_FOLDER}
   build "dockerfile" "avacloud/tomcat:ibas-alpine" ""
+  build "dockerfile" "avacloud/tomcat:ibas-ubi-minimal" "--build-arg BASE_IMAGE=colorcoding/tomcat:ibas-ubi-minimal-v2"
   build "dockerfile-crviewer" "avacloud/tomcat:crviewer-alpine" ""
   build "dockerfile-nginx" "avacloud/tomginx:ibas-alpine" ""
 fi

@@ -2,9 +2,15 @@
 运行应用使用的容器镜像
 
 ## 主要内容 | content
-* tomcat:ibas-alpine （华文宋体）
+* tomcat:ibas-alpine
 ~~~
 docker build -f ./dockerfile -t avacloud/tomcat:ibas-alpine ./
+~~~
+* tomcat:ibas-ubi-minimal
+~~~
+docker build -f ./dockerfile -t avacloud/tomcat:ibas-ubi-minimal \
+  --build-arg BASE_IMAGE="colorcoding/tomcat:ibas-ubi-minimal-v2" \
+  ./
 ~~~
 * tomcat:ibas-wincore （系统缺失dll）
 ~~~

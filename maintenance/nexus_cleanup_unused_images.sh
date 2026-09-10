@@ -13,7 +13,7 @@ echo '      -p [password]          Nexus password.                              
 echo '      -h [host]              Nexus repository URL.                          '
 echo '      -r [repository]        Nexus repository name.                         '
 echo '      -n [namespace]         k8s namespace, omit to search all namespaces.  '
-echo '      -f [filters]           additional image filters (on top of tomcat/nginx).'
+echo '      -f [filters]           filter images (on top of tomcat/nginx).        '
 echo '      -e [expire days]       image expire days, default 30 days.            '
 echo '      -d                     delete mode, actually remove expired images.   '
 echo '****************************************************************************'

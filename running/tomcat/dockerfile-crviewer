@@ -3,9 +3,10 @@ FROM avacloud/tomcat:ibas-alpine
 
 # 安装常用字体
 RUN set -x \
-    && mkdir -p /opt/java/openjdk/jre/lib/fonts \
+    && mkdir -p /usr/share/fonts \
     && curl --retry 3 -LfsSo /tmp/msfonts.tar.gz https://nexus.avacloud.com.cn/repository/software/avatech/fonts/msfonts.tar.gz \
-    && tar -xzvf /tmp/msfonts.tar.gz -C /opt/java/openjdk/jre/lib/fonts \
+    && tar -xzvf /tmp/msfonts.tar.gz -C /usr/share/fonts \
+    && fc-cache -f \
     && rm /tmp/msfonts.tar.gz
 
 # 安装水晶报表运行库

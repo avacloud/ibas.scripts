@@ -1,0 +1,17 @@
+# alpine
+ARG BASE_IMAGE="avacloud/tomcat:crviewer-alpine"
+FROM ${BASE_IMAGE}
+
+# 拷贝程序包清单
+ADD packages.txt ${CATALINA_HOME}/packages.txt
+
+# 现在并释放包文件
+RUN set -x \
+    && cd ${CATALINA_HOME} \
+    && ./download_apps.sh 'FIXED' \
+    && cd ${CATALINA_HOME} \
+    && find ${CATALINA_HOME}/webapps -mindepth 1 -maxdepth 1 -not -name 'crystalreports' -exec rm -rf {} \; \
+    && ./deploy_apps.sh \
+    && rm -rf ${CATALINA_HOME}/ibas_packages \
+    # 修改tomcat配置，以支持jsp文件
+    && sed -i -E 's/[[:space:]]+containerSciFilter="[^"]*"//g' ${CATALINA_HOME}/conf/context.xml
